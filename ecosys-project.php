@@ -15,7 +15,7 @@
 
 
 function ecosys_project_add_menu(){
-    add_menu_page('Welcome to Ecosys Project Management','Ecosys Project Manager','manage_options','ecosys-project-page','ecosys_main_function','dashicons-welcome-widgets-menus','200');
+    add_menu_page('Ecosys Project Management','Ecosys Project Manager','manage_options','ecosys-project-page','ecosys_main_function','dashicons-welcome-widgets-menus','200');
 }
 add_action('admin_menu','ecosys_project_add_menu');
 function ecosys_main_function(){
