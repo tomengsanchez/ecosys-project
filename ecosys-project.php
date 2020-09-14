@@ -33,6 +33,7 @@ function ecosys_main_function(){
         <h2>Company Name : <input type='text' name='company_name1' value='<?php print $company_name;?>'></h2>
         <input type="submit" name='submit_company_name' class='button button-primary' value='Update Company Name'>
         </form>
+    <h3>Here are your Projects</h3>
     <?php
 }
 
