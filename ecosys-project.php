@@ -16,7 +16,7 @@
 //DB installation
 
 include_once('installation/ecosys_db_setup.php');
-
+include_once('project-info.php');
 // Register hook
 register_activation_hook(__FILE__,'db_set');
 
@@ -26,7 +26,13 @@ function ecosys_project_add_menu(){
 }
 add_action('admin_menu','ecosys_project_add_menu');
 
-//add_submenu_page( 'project-info','Project Information', 'Poject', 'manage_options', 'project-info','project-info', 200);
+//submenu for projects
+function ecosys_project_add_sub_menu(){
+    add_submenu_page( 'ecosys-project-page','Project Information', 'Poject', 'manage_options', 'project-info','project_info', 1);
+}
+add_action('admin_menu','ecosys_project_add_sub_menu');
+
+
 function ecosys_main_function(){
     if(array_key_exists('submit_company_name',$_POST)){
         update_option('company_name1',$_POST['company_name1']);
@@ -98,7 +104,7 @@ function ecosys_main_function(){
                 echo "<td>" . $res->project_prefix. "</td>";
                 echo "<td>" . $res->project_name. "</td>";
                 echo "<td>" . $res->project_description. "</td>";
-                echo "<td><a href='" . get_site_url() . "/project-info.php'?project='" . $res->project_prefix. "'> Info</a></td>";
+                echo "<td><a href='" . get_site_url() . "/wp-admin/admin.php?page=project-info&project=" . $res->project_prefix . "'> Info</a></td>";
                 echo "</tr>";
             }
 
