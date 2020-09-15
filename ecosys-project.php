@@ -8,10 +8,17 @@
  * Author:            Tomeng Sanchez Pogi
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       my-basics-plugin
+ * Text Domain:       Ecosys Project Management for Ecosys Systems Only
  * Domain Path:       /languages
  * 
  * */
+
+//DB installation
+
+include_once('installation/ecosys_db_setup.php');
+
+// Register hook
+register_activation_hook(__FILE__,'db_set');
 
 
 function ecosys_project_add_menu(){
@@ -19,7 +26,6 @@ function ecosys_project_add_menu(){
 }
 add_action('admin_menu','ecosys_project_add_menu');
 function ecosys_main_function(){
-    print_r($_POST);
     if(array_key_exists('submit_company_name',$_POST)){
         update_option('company_name1',$_POST['company_name1']);
         ?>
@@ -28,12 +34,85 @@ function ecosys_main_function(){
     }
     $company_name = get_option('company_name1','Not Set');
     ?>
+
         <h1>Welcome to Ecosys Projects Manager</h1>
         <form class='wrap' action='' method='POST'>
         <h2>Company Name : <input type='text' name='company_name1' value='<?php print $company_name;?>'></h2>
         <input type="submit" name='submit_company_name' class='button button-primary' value='Update Company Name'>
         </form>
+    <hr>
+    <h3>Add New Project</h3>
+    <form action='' method='POST'>
+        <table>
+            <tr>
+                <td>Project Prefix</td><td><input type='text' name='proj_prefix' required></td>
+            </tr>
+            <tr>
+                <td>Project Name</td><td><input type='text' name='proj_name' required></td>
+            </tr>
+            <tr>
+                <td>Project Description</td><td><textarea name='project_descrption' required></textarea></td>
+            </tr>
+            <tr>
+                <td></td><td><input type='submit' name='submit_project' value='Add New Project' class='button button-primary'> </td>
+            </tr>
+        <table>
+    </form>
+    <?php 
+    if($_POST['submit_project']){
+        print_r($_POST);
+        global $wpdb;
+        $tb = $wpdb->prefix . "ec_pm_projects";
+        $wpdb->insert( 
+            $tb, 
+            array( 
+                'project_prefix' => $_POST['proj_prefix'], 
+                'project_name' => $_POST['proj_name'], 
+                'project_description' => $_POST['project_descrption'], 
+            ) 
+        );
+        Echo "Successfully Added New Project";
+    }
+    ?>
+    <hr>
     <h3>Here are your Projects</h3>
+
+    <hr>
+    <table id="example" class="display wp-list-table widefat fixed striped table-view-list" width="100%">
+    <thead>
+        <tr>
+        <th>Project Prefix</th>
+        <th>Porject Name</th>
+        <th>Project Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+            global $wpdb;
+            $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}ec_pm_projects", OBJECT );
+            foreach ($results as $res){
+                echo "<tr>";
+                echo "<td>" . $res->project_prefix. "</td>";
+                echo "<td>" . $res->project_name. "</td>";
+                echo "<td>" . $res->project_description. "</td>";
+                echo "</tr>";
+            }
+
+        ?>
+    </tbody>
+    <tfoot>
+        <tr>
+        <tr>
+        <th>Project Prefix</th>
+        <th>Porject Name</th>
+        <th>Project Description</th>
+        </tr>
+        </tr>
+    </tfoot>
+ 
+    <tbody>
+    </tbody>
+</table>
     <?php
 }
 
