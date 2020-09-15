@@ -25,6 +25,8 @@ function ecosys_project_add_menu(){
     add_menu_page('Ecosys Project Management','Ecosys Project Manager','manage_options','ecosys-project-page','ecosys_main_function','dashicons-welcome-widgets-menus','200');
 }
 add_action('admin_menu','ecosys_project_add_menu');
+
+//add_submenu_page( 'project-info','Project Information', 'Poject', 'manage_options', 'project-info','project-info', 200);
 function ecosys_main_function(){
     if(array_key_exists('submit_company_name',$_POST)){
         update_option('company_name1',$_POST['company_name1']);
@@ -84,6 +86,7 @@ function ecosys_main_function(){
         <th>Project Prefix</th>
         <th>Porject Name</th>
         <th>Project Description</th>
+        <Td>Actions</td>
         </tr>
     </thead>
     <tbody>
@@ -95,6 +98,7 @@ function ecosys_main_function(){
                 echo "<td>" . $res->project_prefix. "</td>";
                 echo "<td>" . $res->project_name. "</td>";
                 echo "<td>" . $res->project_description. "</td>";
+                echo "<td><a href='" . get_site_url() . "/project-info.php'?project='" . $res->project_prefix. "'> Info</a></td>";
                 echo "</tr>";
             }
 
@@ -106,6 +110,7 @@ function ecosys_main_function(){
         <th>Project Prefix</th>
         <th>Porject Name</th>
         <th>Project Description</th>
+        <Td></td>
         </tr>
         </tr>
     </tfoot>
