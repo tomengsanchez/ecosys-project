@@ -49,6 +49,33 @@ function project_info(){
                 <table>
             </form>
      <hr>
+    <?php 
+        echo $showcountQuery = "Select 
+            u.user_login as uid, 
+            u.ID 
+        from 
+            " . $wpdb->prefix .  "users as u, 
+            " . $wpdb->prefix. "usermeta as umetaP
+        WHERE 
+            u.ID = umetaP.user_id
+            and umetaP.meta_value = '" . $_GET['project']. "'";
+        $showcountResult = "";
+
+        $wpdb->get_results($showcountQuery);
+        $totalPaps = $wpdb->num_rows;
+    ?>
+    <table>
+    <tr>
+        <td><h4>Paps Total</h4></td><td><?php echo $totalPaps ?></td>
+    </tr>
+    </table>
+
+    <hr></hr>
+    <table>
+        <thead>
+        </thead>
+
+    </table>
     <?php
     
     //print_r($_POST);

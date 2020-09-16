@@ -20,6 +20,15 @@ include_once('project-info.php');
 // Register hook
 register_activation_hook(__FILE__,'db_set');
 
+function my_enqueue($hook) {
+    // Only add to the edit.php admin page.
+    // See WP docs.
+    wp_enqueue_script('datatablecss', plugin_dir_url(__FILE__) . '/jqcss/dt.css');
+    wp_enqueue_script('datatablejs', plugin_dir_url(__FILE__) . '/jqjs/dt.js');
+    wp_enqueue_script('ecosysjs', plugin_dir_url(__FILE__) . '/js/ecosys.js');
+}
+
+add_action('admin_enqueue_scripts', 'my_enqueue');
 
 function ecosys_project_add_menu(){
     add_menu_page('Ecosys Project Management','Ecosys Project Manager','manage_options','ecosys-project-page','ecosys_main_function','dashicons-welcome-widgets-menus','200');
@@ -28,7 +37,7 @@ add_action('admin_menu','ecosys_project_add_menu');
 
 //submenu for projects
 function ecosys_project_add_sub_menu(){
-    add_submenu_page( 'ecosys-project-page','Project Information', 'Poject', 'manage_options', 'project-info','project_info', 1);
+    add_submenu_page( 'ecosys-project-page1','Project Information', 'Poject', 'manage_options', 'project-info','project_info', 1);
 }
 add_action('admin_menu','ecosys_project_add_sub_menu');
 
