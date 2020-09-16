@@ -51,8 +51,8 @@ function project_info(){
      <hr>
     <?php 
         echo $showcountQuery = "Select 
-            u.user_login as uid, 
-            u.ID 
+            u.user_login as controlId, 
+            u.ID as ID
         from 
             " . $wpdb->prefix .  "users as u, 
             " . $wpdb->prefix. "usermeta as umetaP
@@ -61,7 +61,7 @@ function project_info(){
             and umetaP.meta_value = '" . $_GET['project']. "'";
         $showcountResult = "";
 
-        $wpdb->get_results($showcountQuery);
+        $result = $wpdb->get_results($showcountQuery);
         $totalPaps = $wpdb->num_rows;
     ?>
     <table>
@@ -71,10 +71,36 @@ function project_info(){
     </table>
 
     <hr></hr>
-    <table>
+    <table id='project-table'>
         <thead>
+            <tr>
+                <th>Control Number</th>
+                <th>Full Name</th>
+                <th>Status</th>
+                <th>Mobile Number</th>
+                <th>Barangay</th>
+                <th>City</th>
+                <th>Last Login</th>
+                
+            </tr>
         </thead>
-
+        <tbody>
+            <?php
+                foreach($result as $res){
+                    ?>
+                    <tr>
+                        <td><?php echo $res->controlId?></td>
+                        <td><?php echo get_user_meta( $res->ID,'last_name',true)?>,<?php echo get_user_meta( $res->ID,'first_name',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'last-login',true)?></td>
+                    </tr>
+                    <?php        
+                }
+             ?>
+        </tbody>
     </table>
     <?php
     
