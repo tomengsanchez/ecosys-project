@@ -1,7 +1,8 @@
 <?php
-
+ 
 
 function project_info(){
+    
     global $wpdb;
     $tb = $wpdb->prefix . "ec_pm_projects";
     
@@ -46,32 +47,97 @@ function project_info(){
                     <tr>
                         <td></td><td><input type='submit' name='submit_edit' value='update' class='button button-primary'> </td>
                     </tr>
-                <table>
+                </table>
             </form>
      <hr>
-    <?php 
-        echo $showcountQuery = "Select 
-            u.user_login as controlId, 
-            u.ID as ID
-        from 
-            " . $wpdb->prefix .  "users as u, 
-            " . $wpdb->prefix. "usermeta as umetaP
-        WHERE 
-            u.ID = umetaP.user_id
-            and umetaP.meta_value = '" . $_GET['project']. "'";
-        $showcountResult = "";
-
+    <?php
         $result = $wpdb->get_results($showcountQuery);
-        $totalPaps = $wpdb->num_rows;
+        $search_term = $_GET['s'];
+        if(!$_GET['numbers'])
+            $numbers = 50;
+        else
+            $numbers = $_GET['numbers'];
+        $searchQ = array( 
+                        'number' => '' . $numbers. '',
+                        'meta_key' => 'project', 
+                        'meta_value' => '' .$_GET['project'] . '',
+                        'orderby'=>array('meta_key'=>'nickname'),
+                        'order'=>'ASC',
+                        'meta_query' => array(
+                            'relation' => 'OR',
+                            array(
+                                'key'     => 'first_name',
+                                'value'   => $search_term,
+                                'compare' => 'LIKE'
+                            ),
+                            array(
+                                'key'     => 'last_name',
+                                'value'   => $search_term,
+                                'compare' => 'LIKE'
+                            ),
+                            array(
+                                'key'     => 'barangay',
+                                'value'   => $search_term ,
+                                'compare' => 'LIKE'
+                            ),
+                            array(
+                                'key'     => 'nickname',
+                                'value'   => $search_term ,
+                                'compare' => 'LIKE'
+                            ),
+                            array(
+                                'key'     => 'paps_status',
+                                'value'   => $search_term ,
+                                'compare' => 'LIKE'
+                            )
+                            
+                        )
+                    );
+        $userQuery = new WP_User_Query($searchQ);
+        $result = $userQuery->get_results();
+        $userQuery->total_users;
+        
+        //totalPaps Project
+        $totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
+        //echo "<pre>" . print_r($userQuery) . "</pre>";
     ?>
     <table>
-    <tr>
-        <td><h4>Paps Total</h4></td><td><?php echo $totalPaps ?></td>
-    </tr>
+        <tr>
+            <th><h2>Population</h2></th>
+        </tr>
+        <tr>
+            <th><h4>Paps Total</h4></th><td><?php echo $totalPaps->total_users; ?></td>
+        </tr>
     </table>
-
-    <hr></hr>
+    <hr>
+    <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=NSCR' method='GET'>
+        <table>
+            <tr>
+                
+            </tr>
+            <tr>
+                <td>
+                    <h4>Showing 
+                    <select name='numbers'>
+                        <option value='50' <?php if($numbers == 50) echo "selected" ?> >50</option>
+                        <option value='100' <?php if($numbers == 100) echo "selected" ?> >100</option>
+                        <option value='200'<?php if($numbers == 200) echo "selected" ?> >200</option>
+                        <option value='500' <?php if($numbers == 500) echo "selected" ?> >500</option>
+                        <option value='1000' <?php if($numbers == 1000) echo "selected" ?>>1000</option>
+                        <option value='2000' <?php if($numbers == 2000) echo "selected" ?> >2000</option>
+                        <option value='5000' <?php if($numbers == 5000) echo "selected" ?>>5000</option>
+                    </select>
+                     of <?php echo $userQuery->total_users; ?><h4>
+                </td>
+                <td><input type='hidden' name='page' value='project-info'><input type='hidden' name='project' value='<?php echo $_GET['project'] ?>'><h4>Search Keyword</h4>
+                </td><td><input type='text' name='s' value='<?php echo $search_term ?>'></td>
+                <td><input type='submit' name='submit_search' value='Search/Update Table'></td>
+                <td><h4>Search Results</h4></td><td><?php echo $userQuery->total_users; ?></td>
+            </tr>
+        </table>
+    </form>                    
     <table id='project-table'>
+        
         <thead>
             <tr>
                 <th>Control Number</th>
@@ -89,7 +155,7 @@ function project_info(){
                 foreach($result as $res){
                     ?>
                     <tr>
-                        <td><?php echo $res->controlId?></td>
+                        <td><?php echo $res->user_login?></td>
                         <td><?php echo get_user_meta( $res->ID,'last_name',true)?>,<?php echo get_user_meta( $res->ID,'first_name',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>

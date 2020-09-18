@@ -20,13 +20,7 @@ include_once('project-info.php');
 // Register hook
 register_activation_hook(__FILE__,'db_set');
 
-function css_cdn(){
-    ?>
-   
-    <?php
-}
-add_action('admin_head','css_cdn');
-add_action('admin_enqueue_scripts', 'my_enqueue');
+
 
 function my_enqueue($hook) {
     // Only add to the edit.php admin page.
@@ -35,10 +29,13 @@ function my_enqueue($hook) {
 
     <?php
     wp_enqueue_style('dt-css', plugin_dir_url(__FILE__) . 'Datatable/datatables.css');
-    wp_enqueue_script('dt-jquery-ecosys', plugin_dir_url(__FILE__) . 'jqjs/jquery.min.js');
-    wp_enqueue_script('dt-datatable', plugin_dir_url(__FILE__) . 'Datatable/datatables.js');
+    //wp_enqueue_script('dt-jquery-ecosys', plugin_dir_url(__FILE__) . 'jqjs/jquery.min.js');
+    wp_enqueue_script('dt-datatable-eco', plugin_dir_url(__FILE__) . 'Datatable/datatables.min.js','','');
 
     wp_enqueue_script('ecosysjs', plugin_dir_url(__FILE__) . 'js/ecosys.js','','',true);
+}
+if($_GET['page']=='project-info'){
+    add_action('admin_enqueue_scripts', 'my_enqueue');
 }
 
 
@@ -55,6 +52,7 @@ add_action('admin_menu','ecosys_project_add_sub_menu');
 
 
 function ecosys_main_function(){
+    
     if(array_key_exists('submit_company_name',$_POST)){
         update_option('company_name1',$_POST['company_name1']);
         ?>
