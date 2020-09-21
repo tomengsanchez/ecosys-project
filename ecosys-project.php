@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Ecosys Project Management made by Tomeng Sanchez
  * Description:       Add Ecosys Projects
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            Tomeng Sanchez Napaka POGI
