@@ -4,8 +4,24 @@ $("#project-table").DataTable({
     "searching":false,
     "stateSave": true,
     "order": [[ 0, "asc" ]],
-    "buttons": ['excel','csv'
-       
+    "buttons": [
+        {
+            extend: 'excel',
+            exportOptions: {
+                columns: ':visible'
+            }
+        },
+        {
+            extend: 'csv',
+            exportOptions: {
+                columns: ':visible'
+            }
+        },
+        {
+            extend: 'collection',
+            text: 'Hide/Show Columns',
+            buttons: [ 'columnsVisibility' ],
+            visibility: true
+        }
     ]
-    
 });
