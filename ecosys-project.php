@@ -45,10 +45,10 @@ function datatable_cdn(){
     <?php
 
 }
-if($_GET['page']=='project-info'){
+//if($_GET['page']=='project-info'){
     add_action('admin_enqueue_scripts', 'my_enqueue');
     //add_action('admin_head','datatable_cdn');
-}
+//}
 
 
 function ecosys_project_add_menu(){
