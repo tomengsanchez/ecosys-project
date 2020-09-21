@@ -1,6 +1,6 @@
 <?php 
 /**
- * Plugin Name: Ecosys Project Management made by Tomeng
+ * Plugin Name: Ecosys Project Management made by Tomeng Sanchez
  * Description:       Add Ecosys Projects
  * Version:           1.0.0
  * Requires at least: 5.2
