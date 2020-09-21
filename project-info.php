@@ -1,6 +1,6 @@
 <?php
  
-
+add_shortcode('ec_project','project_info');
 function project_info(){
     
     global $wpdb;
@@ -136,7 +136,7 @@ function project_info(){
             </tr>
         </table>
     </form>                    
-    <table id='project-table'>
+    <table id='project-table' class='display'>
         
         <thead>
             <tr>
@@ -155,7 +155,7 @@ function project_info(){
                 foreach($result as $res){
                     ?>
                     <tr>
-                        <td><?php echo $res->user_login?></td>
+                        <td><a style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
                         <td><?php echo get_user_meta( $res->ID,'last_name',true)?>,<?php echo get_user_meta( $res->ID,'first_name',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>
