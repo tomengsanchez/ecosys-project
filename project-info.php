@@ -137,7 +137,7 @@ function project_info(){
         </table>
     </form>                    
     <table id='project-table' class='display'>
-        
+       
         <thead>
             <tr>
                 <th>Control Number</th>
@@ -147,9 +147,16 @@ function project_info(){
                 <th>Barangay</th>
                 <th>City</th>
                 <th>Last Login</th>
+                <th>Last Login Ip</th>
+                <th>Default Password</th>
+                <th>SCM1 Question</th>
+                <th>SCM2 Question</th>
                 
             </tr>
         </thead>
+        
+           
+        
         <tbody>
             <?php
                 foreach($result as $res){
@@ -162,6 +169,10 @@ function project_info(){
                         <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'last-login',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'last-login-ip',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'default_password',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'SCM1-Q-4',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'SCM2-Q-4',true)?></td>
                     </tr>
                     <?php        
                 }

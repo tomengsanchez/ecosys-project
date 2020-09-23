@@ -29,6 +29,7 @@ function my_enqueue($hook) {
 
     <?php
     wp_enqueue_style('dt-css', plugin_dir_url(__FILE__) . 'Datatable/datatables.css');
+    wp_enqueue_style('ecosyscss', plugin_dir_url(__FILE__) . 'css/ecosys.css');
     wp_enqueue_script('dt-jquery-ecosys', plugin_dir_url(__FILE__) . 'jqjs/jquery.min.js');
     wp_enqueue_script('dt-datatable-eco', plugin_dir_url(__FILE__) . 'Datatable/datatables.min.js','','');
 
