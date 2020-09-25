@@ -5,12 +5,7 @@ function project_info(){
     
     global $wpdb;
     $tb = $wpdb->prefix . "ec_pm_projects";
-    
-
     print_r($project_info);
-
-    
-
     if($_POST['submit_edit']){
         
         $wpdb->update( 
@@ -31,25 +26,26 @@ function project_info(){
 
     ?>
     <hr>
-    
+
+
     <a class='button button-secondary' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=ecosys-project-page'>Back to Project Management</a>
     <hr>
     <form action='' method='POST'>
-                <table>
-                    <tr>
-                        <td>Project Prefix</td><td><input type='text' name='proj_prefix' required value='<?php echo $project_info->project_prefix?>' disabled></td>
-                    </tr>
-                    <tr>
-                        <td>Project Name</td><td><input type='text' name='proj_name' required value='<?php echo $project_info->project_name?>' size='50'></td>
-                    </tr>
-                    <tr>
-                        <td>Project Description</td><td><textarea name='project_descrption' required   ><?php echo $project_info->project_description?></textarea></td>
-                    </tr>
-                    <tr>
-                        <td></td><td><input type='submit' name='submit_edit' value='update' class='button button-primary'> </td>
-                    </tr>
-                </table>
-            </form>
+        <table>
+            <tr>
+                <td>Project Prefix</td><td><input type='text' name='proj_prefix' required value='<?php echo $project_info->project_prefix?>' disabled></td>
+            </tr>
+            <tr>
+                <td>Project Name</td><td><input type='text' name='proj_name' required value='<?php echo $project_info->project_name?>' size='50'></td>
+            </tr>
+            <tr>
+                <td>Project Description</td><td><textarea name='project_descrption' required   ><?php echo $project_info->project_description?></textarea></td>
+            </tr>
+            <tr>
+                <td></td><td><input type='submit' name='submit_edit' value='update' class='button button-primary'> </td>
+            </tr>
+        </table>
+    </form>
      <hr>
     <?php
         $result = $wpdb->get_results($showcountQuery);
@@ -102,21 +98,26 @@ function project_info(){
         $totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
         //echo "<pre>" . print_r($userQuery) . "</pre>";
     ?>
+    <div>
     
-    
-    <table>
-        <tr>
-            <td></td><td><pre id='sampleDiv'></pre></td>
-        </tr>
-        <tr>
-            <th><h2>Population</h2></th>
-        </tr>
-        <tr>
-            <th><h4>Paps Total</h4></th><td><?php echo $totalPaps->total_users; ?></td>
-        </tr>
-    </table>
+    </div>
+    <div>                                            
+        <table>
+            <tr>
+                <td></td><td><pre id='sampleDiv'></pre></td>
+            </tr>
+            <tr>
+                <th><h2>Population</h2></th>
+            </tr>
+            <tr>
+                <th><h4>Paps Total</h4></th><td><?php echo $totalPaps->total_users; ?></td>
+            </tr>
+        </table>
+    </div>
+    <div>
+    </div>
     <hr>
-    <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=NSCR' method='GET'>
+    <!-- <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=NSCR' method='GET'>
         <table>
             <tr>
                 
@@ -141,7 +142,7 @@ function project_info(){
                 <td><h4>Search Results</h4></td><td><?php echo $userQuery->total_users; ?></td>
             </tr>
         </table>
-    </form>                    
+    </form>                     -->
     <table id='project-table' class='display'>
        
         <thead>
