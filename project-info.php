@@ -31,6 +31,7 @@ function project_info(){
 
     ?>
     <hr>
+    
     <a class='button button-secondary' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=ecosys-project-page'>Back to Project Management</a>
     <hr>
     <form action='' method='POST'>
@@ -101,7 +102,12 @@ function project_info(){
         $totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
         //echo "<pre>" . print_r($userQuery) . "</pre>";
     ?>
+    
+    
     <table>
+        <tr>
+            <td></td><td><pre id='sampleDiv'></pre></td>
+        </tr>
         <tr>
             <th><h2>Population</h2></th>
         </tr>
@@ -141,7 +147,8 @@ function project_info(){
         <thead>
             <tr>
                 <th>Control Number</th>
-                <th>Full Name</th>
+                <th>Last Name</th>
+                <th>First Name</th>
                 <th>Status</th>
                 <th>Mobile Number</th>
                 <th>Barangay</th>
@@ -163,7 +170,8 @@ function project_info(){
                     ?>
                     <tr>
                         <td><a style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
-                        <td><?php echo get_user_meta( $res->ID,'last_name',true)?>,<?php echo get_user_meta( $res->ID,'first_name',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'last_name',true)?></td>
+                        <td><?php echo $res->first_name?></td>
                         <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>

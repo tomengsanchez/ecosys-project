@@ -16,6 +16,7 @@
 //DB installation
 
 include_once('installation/ecosys_db_setup.php');
+include_once('ajax/ajax.php');
 include_once('project-info.php');
 // Register hook
 register_activation_hook(__FILE__,'db_set');
