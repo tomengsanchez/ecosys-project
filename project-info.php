@@ -46,62 +46,62 @@ function project_info(){
             </tr>
         </table>
     </form>
-     <hr>
+    <hr>
+    
+     
     <?php
-        $result = $wpdb->get_results($showcountQuery);
-        $search_term = $_GET['s'];
-        if(!$_GET['numbers'])
-            $numbers = 50;
-        else
-            $numbers = $_GET['numbers'];
-        $searchQ = array( 
-                        'number' => '' . $numbers. '',
-                        'meta_key' => 'project', 
-                        'meta_value' => '' .$_GET['project'] . '',
-                        'orderby'=>array('meta_key'=>'nickname'),
-                        'order'=>'ASC',
-                        'meta_query' => array(
-                            'relation' => 'OR',
-                            array(
+	$result = $wpdb->get_results($showcountQuery);
+	$search_term = $_GET['s'];
+	if(!$_GET['numbers'])
+		$numbers = 50;
+	else
+		$numbers = $_GET['numbers'];
+	$searchQ = array( 
+                'meta_key' => 'project', 
+                'meta_value' => '' .$_GET['project'] . '',
+                'orderby'=>array('meta_key'=>'nickname'),
+                'order'=>'ASC',
+                'meta_query' => array(
+                        'relation' => 'OR',
+                        array(
                                 'key'     => 'first_name',
                                 'value'   => $search_term,
                                 'compare' => 'LIKE'
-                            ),
-                            array(
+                        ),
+                        array(
                                 'key'     => 'last_name',
                                 'value'   => $search_term,
                                 'compare' => 'LIKE'
-                            ),
-                            array(
+                        ),
+                        array(
                                 'key'     => 'barangay',
                                 'value'   => $search_term ,
                                 'compare' => 'LIKE'
-                            ),
-                            array(
+                        ),
+                        array(
                                 'key'     => 'nickname',
                                 'value'   => $search_term ,
                                 'compare' => 'LIKE'
-                            ),
-                            array(
+                        ),
+                        array(
                                 'key'     => 'paps_status',
                                 'value'   => $search_term ,
                                 'compare' => 'LIKE'
-                            )
-                            
                         )
-                    );
-        $userQuery = new WP_User_Query($searchQ);
-        $result = $userQuery->get_results();
-        $userQuery->total_users;
-        
-        //totalPaps Project
-        $totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
-        //echo "<pre>" . print_r($userQuery) . "</pre>";
+
+                )
+        );
+	$userQuery = new WP_User_Query($searchQ);
+	$result = $userQuery->get_results();
+	$userQuery->total_users;
+	
+	//totalPaps Project
+	$totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
+	//echo "<pre>" . print_r($userQuery) . "</pre>";
     ?>
     <div>
-    
+        
     </div>
-    <div>                                            
         <table>
             <tr>
                 <td></td><td><pre id='sampleDiv'></pre></td>
@@ -113,10 +113,9 @@ function project_info(){
                 <th><h4>Paps Total</h4></th><td><?php echo $totalPaps->total_users; ?></td>
             </tr>
         </table>
-    </div>
-    <div>
-    </div>
     <hr>
+    
+    
     <!-- <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=NSCR' method='GET'>
         <table>
             <tr>
@@ -126,7 +125,7 @@ function project_info(){
                 <td>
                     <h4>Showing 
                     <select name='numbers'>
-                        <option value='50' <?php if($numbers == 50) echo "selected" ?> >50</option>
+                        <option value='50' <?php if($numbers == 50){ echo "selected";} ?> >50</option>
                         <option value='100' <?php if($numbers == 100) echo "selected" ?> >100</option>
                         <option value='200'<?php if($numbers == 200) echo "selected" ?> >200</option>
                         <option value='500' <?php if($numbers == 500) echo "selected" ?> >500</option>
@@ -170,7 +169,7 @@ function project_info(){
                 foreach($result as $res){
                     ?>
                     <tr>
-                        <td><a style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
+                        <td><a clas='link' style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
                         <td><?php echo get_user_meta( $res->ID,'last_name',true)?></td>
                         <td><?php echo $res->first_name?></td>
                         <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
