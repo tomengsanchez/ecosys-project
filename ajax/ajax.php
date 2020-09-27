@@ -9,9 +9,11 @@ add_action('wp_ajax_datatable_ajax','sample_datatable_ajax');
 
 function sample_datatable_ajax(){
     if (!wp_verify_nonce( $_REQUEST['nonce'],'projectTableQuery')) {
+        exit("SECURITY ERROR");
         //die();
     }   
 
+    
     $searchQ = array( 
         'number' => '' . $numbers. '',
         'meta_key' => 'project', 

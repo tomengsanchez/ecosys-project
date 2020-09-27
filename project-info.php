@@ -143,7 +143,44 @@ function project_info(){
     <?php
         $nonce = wp_create_nonce('projectTableQuery');
      ?>
-    
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $("#project-table").DataTable({
+                "ajax":{
+                    "url" : "<?php echo get_admin_url()?>admin-ajax.php?action=datatable_ajax&project=<?php echo $_GET['project']?>",
+                    data:{
+                        "nonce":"<?php echo $nonce?>"
+                    }
+                },
+                dom: 'lBfprtip',
+                "paging":   true,
+                "lengthMenu": [ [20, 50, 100, 500, 1000 ,-1], [20, 50, 100, 500, 1000, "All"] ],
+                "searching":true,
+                "stateSave": true,
+                "order": [[ 0, "asc" ]],
+                "buttons": [
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'csv',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    {
+                        extend: 'collection',
+                        text: 'Hide/Show Columns',
+                        buttons: [ 'columnsVisibility' ],
+                        visibility: true
+                    }
+                ]
+            });
+        });
+    </script>        
     
     <table id='project-table' class='display'>
        
@@ -190,44 +227,7 @@ function project_info(){
              ?>
         </tbody>
     </table>
-    <script type='text/javascript'>
-        $(document).ready(function(){
-            $("#project-table").DataTable({
-                "ajax":{
-                    "url" : "<?php echo get_admin_url()?>admin-ajax.php?action=datatable_ajax&project=<?php echo $_GET['project']?>",
-                    data:{
-                        "nonce":"<?php echo $nonce?>"
-                    }
-                },
-                dom: 'lBfprtip',
-                "paging":   true,
-                "lengthMenu": [ [20, 50, 100, 500, 1000 ,-1], [20, 50, 100, 500, 1000, "All"] ],
-                "searching":true,
-                "stateSave": true,
-                "order": [[ 0, "asc" ]],
-                "buttons": [
-                    {
-                        extend: 'excel',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'csv',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'collection',
-                        text: 'Hide/Show Columns',
-                        buttons: [ 'columnsVisibility' ],
-                        visibility: true
-                    }
-                ]
-            });
-        });
-    </script>        
+    
     <?php
     
     //print_r($_POST);
