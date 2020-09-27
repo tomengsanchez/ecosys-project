@@ -2,16 +2,16 @@
 add_action('wp_ajax_sample1','sample_ajax1');
 
 function sample_ajax1(){
-    if (!wp_verify_nonce( $_REQUEST['nonce'],'sample1')) {
-        exit("SECURITY ERROR");
-    }   
-
-    die();
+    
 }
 
 add_action('wp_ajax_datatable_ajax','sample_datatable_ajax');
 
 function sample_datatable_ajax(){
+    if (!wp_verify_nonce( $_REQUEST['nonce'],'projectTableQuery')) {
+        //die();
+    }   
+
     $searchQ = array( 
         'number' => '' . $numbers. '',
         'meta_key' => 'project', 
@@ -59,14 +59,29 @@ function sample_datatable_ajax(){
         $x =1;
     foreach($result as $res){
         echo "[";
-        echo "
-        \"" . $x . "\",
-        ";
         echo "\"" . $res->user_login . "\",
         ";
         echo "\"" . $res->last_name . "\",
         ";
-        echo "\"" . $res->first_name . "\"
+        echo "\"" . $res->first_name . "\",
+        ";
+        echo "\"" . $res->paps_status . "\",
+        ";
+        echo "\"" . $res->mobile_number . "\",
+        ";
+        echo "\"" . $res->barangay . "\",
+        ";
+        echo "\"" . $res->city . "\",
+        ";
+        echo "\"" . $res->last_login . "\",
+        ";
+        echo "\"" . $res->last_login_ip . "\",
+        ";
+        echo "\"" . $res->default_password . "\",
+        ";
+        echo "\"" . get_user_meta( $res->ID,'SCM1-Q-4',true). "\",
+        ";
+        echo "\"" . get_user_meta( $res->ID,'SCM2-Q-4',true) . "\"
         ";
         echo "]";
         if($x != $userQuery->total_users){

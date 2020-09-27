@@ -1,4 +1,4 @@
-$("#project-table").DataTable({
+$("#project-table1").DataTable({
     dom: 'lBfprtip',
     "paging":   true,
     "lengthMenu": [ [20, 50, 100, 500, 1000 ,-1], [20, 50, 100, 500, 1000, "All"] ],
