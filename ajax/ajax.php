@@ -8,7 +8,7 @@ function sample_ajax1(){
 add_action('wp_ajax_datatable_ajax','sample_datatable_ajax');
 
 function sample_datatable_ajax(){
-    if (!wp_verify_nonce( $_REQUEST['nonce'],'projectTableQuery')) {
+    if (!wp_verify_nonce( $_REQUEST['nonce'],get_current_user_id() . "-projectTableQuery")) {
         exit("SECURITY ERROR");
         //die();
     }   
@@ -61,7 +61,8 @@ function sample_datatable_ajax(){
         $x =1;
     foreach($result as $res){
         echo "[";
-        echo "\"" . $res->user_login . "\",
+        
+        echo "\"<a style='cursor:pointer' onclick='window.open(&quot;" . get_site_url() . "/user-profile/?user_id=" . $res->ID . "&quot;,&quot;_blank&quot;,&quot;toolbar=yes,scrollbars=yes,resizable=yes&quot;)'>" . $res->user_login . "</a>\",
         ";
         echo "\"" . $res->last_name . "\",
         ";

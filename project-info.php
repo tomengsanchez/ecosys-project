@@ -57,8 +57,9 @@ function project_info(){
 	else
 		$numbers = $_GET['numbers'];
 	$searchQ = array( 
+                'number' => '' . $numbers. '',
                 'meta_key' => 'project', 
-                'meta_value' => '' .$_GET['project'] . '1',
+                'meta_value' => '' .$_GET['project'] . '',
                 'orderby'=>array('meta_key'=>'nickname'),
                 'order'=>'ASC',
                 'meta_query' => array(
@@ -96,7 +97,10 @@ function project_info(){
 	$userQuery->total_users;
 	
 	//totalPaps Project
-	$totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
+    $totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
+    $totalPapsRegistered = new WP_User_Query(array(
+        'meta_key' => 'project', 
+        'meta_value' => '' .$_GET['project'] . ''));
 	//echo "<pre>" . print_r($userQuery) . "</pre>";
     ?>
     
@@ -108,13 +112,16 @@ function project_info(){
                 <th><h2>Population</h2></th>
             </tr>
             <tr>
-                <th><h4>Paps Total</h4></th><td><?php echo $totalPaps->total_users; ?></td>
+                <th><h5>Total Imported</h5></th><td><?php echo $totalPaps->total_users; ?></td>
+            </tr>
+            <tr>
+                <th><h5>Registered</h5></th><td><?php echo $totalPapsRegistered->total_users; ?></td>
             </tr>
         </table>
     <hr>
     
     
-    <!-- <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=NSCR' method='GET'>
+    <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=NSCR' method='GET'>
         <table>
             <tr>
                 
@@ -139,48 +146,12 @@ function project_info(){
                 <td><h4>Search Results</h4></td><td><?php echo $userQuery->total_users; ?></td>
             </tr>
         </table>
-    </form>                     -->
+    </form>                    
     <?php
-        $nonce = wp_create_nonce('projectTableQuery');
+        $nonce = wp_create_nonce(get_current_user_id() . "-projectTableQuery");
      ?>
-    <script type='text/javascript'>
-        $(document).ready(function(){
-            $("#project-table").DataTable({
-                "ajax":{
-                    "url" : "<?php echo get_admin_url()?>admin-ajax.php?action=datatable_ajax&project=<?php echo $_GET['project']?>",
-                    data:{
-                        "nonce":"<?php echo $nonce?>"
-                    }
-                },
-                dom: 'lBfprtip',
-                "paging":   true,
-                "lengthMenu": [ [20, 50, 100, 500, 1000 ,-1], [20, 50, 100, 500, 1000, "All"] ],
-                "searching":true,
-                "stateSave": true,
-                "order": [[ 0, "asc" ]],
-                "buttons": [
-                    {
-                        extend: 'excel',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'csv',
-                        exportOptions: {
-                            columns: ':visible'
-                        }
-                    },
-                    {
-                        extend: 'collection',
-                        text: 'Hide/Show Columns',
-                        buttons: [ 'columnsVisibility' ],
-                        visibility: true
-                    }
-                ]
-            });
-        });
-    </script>        
+     <?php echo get_current_user_id() . "-projectTableQuery";?>
+      
     
     <table id='project-table' class='display'>
        
