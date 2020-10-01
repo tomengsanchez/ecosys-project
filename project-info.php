@@ -57,40 +57,40 @@ function project_info(){
 	else
 		$numbers = $_GET['numbers'];
 	$searchQ = array( 
-                'number' => '' . $numbers. '',
-                'meta_key' => 'project', 
-                'meta_value' => '' .$_GET['project'] . '',
-                'orderby'=>array('meta_key'=>'nickname'),
-                'order'=>'ASC',
-                'meta_query' => array(
-                        'relation' => 'OR',
-                        array(
-                                'key'     => 'first_name',
-                                'value'   => $search_term,
-                                'compare' => 'LIKE'
-                        ),
-                        array(
-                                'key'     => 'last_name',
-                                'value'   => $search_term,
-                                'compare' => 'LIKE'
-                        ),
-                        array(
-                                'key'     => 'barangay',
-                                'value'   => $search_term ,
-                                'compare' => 'LIKE'
-                        ),
-                        array(
-                                'key'     => 'nickname',
-                                'value'   => $search_term ,
-                                'compare' => 'LIKE'
-                        ),
-                        array(
-                                'key'     => 'paps_status',
-                                'value'   => $search_term ,
-                                'compare' => 'LIKE'
-                        )
+            'number' => '' . $numbers. '',
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'orderby'=>array('meta_key'=>'nickname'),
+            'order'=>'ASC',
+            'meta_query' => array(
+                    'relation' => 'OR',
+                    array(
+                            'key'     => 'first_name',
+                            'value'   => $search_term,
+                            'compare' => 'LIKE'
+                    ),
+                    array(
+                            'key'     => 'last_name',
+                            'value'   => $search_term,
+                            'compare' => 'LIKE'
+                    ),
+                    array(
+                            'key'     => 'barangay',
+                            'value'   => $search_term ,
+                            'compare' => 'LIKE'
+                    ),
+                    array(
+                            'key'     => 'nickname',
+                            'value'   => $search_term ,
+                            'compare' => 'LIKE'
+                    ),
+                    array(
+                            'key'     => 'paps_status',
+                            'value'   => $search_term ,
+                            'compare' => 'LIKE'
+                    )
 
-                )
+            )
         );
 	$userQuery = new WP_User_Query($searchQ);
 	$result = $userQuery->get_results();
@@ -98,25 +98,100 @@ function project_info(){
 	
 	//totalPaps Project
     $totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
-    $totalPapsRegistered = new WP_User_Query(array(
+    $queryRegisterd = array(
+        
         'meta_key' => 'project', 
-        'meta_value' => '' .$_GET['project'] . ''));
-	//echo "<pre>" . print_r($userQuery) . "</pre>";
+        'meta_value' => '' .$_GET['project'] . '',
+        'meta_key' => 'nickname', 
+        'meta_value' => 'CTBEX2020-000033',
+        'compare'=>'!='
+    );
+    $totalPapsRegistered = new WP_User_Query($queryRegisterd);
+    //echo "<pre>" . print_r($userQuery) . "</pre>";
+    $sqlSCM1  = new WP_User_Query(
+        array(
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'meta_key'=> 'paps_status',
+            'meta_value' => 'SCM-1'
+        ));
+    $sqlSCM1  = new WP_User_Query(
+        array(
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'meta_key'=> 'paps_status',
+            'meta_value' => 'SCM-1'
+        ));
+    $sqlSCM1DONE  = new WP_User_Query(
+        array(
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'meta_key'=> 'paps_status',
+            'meta_value' => 'SCM-1-DONE'
+        ));
+    $sqlSES  = new WP_User_Query(
+        array(
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'meta_key'=> 'paps_status',
+            'meta_value' => 'SES'
+        ));
+    $sqlSESDONE  = new WP_User_Query(
+        array(
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'meta_key'=> 'paps_status',
+            'meta_value' => 'SES-DONE'
+        ));
+    $sqlSCM2  = new WP_User_Query(
+        array(
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'meta_key'=> 'paps_status',
+            'meta_value' => 'SCM-2'
+        ));
+    $sqlSCM2  = new WP_User_Query(
+        array(
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'meta_key'=> 'paps_status',
+            'meta_value' => 'SCM-2'
+        ));
+    $sqlSCM2DONE  = new WP_User_Query(
+        array(
+            'meta_key' => 'project', 
+            'meta_value' => '' .$_GET['project'] . '',
+            'meta_key'=> 'paps_status',
+            'meta_value' => 'SCM-2-DONE'
+        ));
     ?>
-    
-        <table>
+
+        <table class='population-table table table-dark table-hover table-responsive-sm'>
             <tr>
-                <td></td><td><pre id='sampleDiv'></pre></td>
+                <th colspan='2'>Population Break Down</th>
             </tr>
             <tr>
-                <th><h2>Population</h2></th>
+                <th>Total Imported</th><td><?php echo $totalPaps->total_users; ?></td>
             </tr>
             <tr>
-                <th><h5>Total Imported</h5></th><td><?php echo $totalPaps->total_users; ?></td>
+                <th>SCM 1</th><td><?php echo $sqlSCM1->total_users; ?></td>
             </tr>
             <tr>
-                <th><h5>Registered</h5></th><td><?php echo $totalPapsRegistered->total_users; ?></td>
+                <th>SCM 1 DONE</th><td><?php echo $sqlSCM1DONE->total_users; ?></td>
             </tr>
+            <tr>
+                <th>SES</th><td><?php echo $sqlSES->total_users; ?></td>
+            </tr>
+            <tr>
+                <th>SES DONE</th><td><?php echo $sqlSESDONE->total_users; ?></td>
+            </tr>
+            <tr>
+                <th>SCM 2</th><td><?php echo $sqlSCM2->total_users; ?></td>
+            </tr>
+            <tr>
+                <th>SCM 2 DONE</th><td><?php echo $sqlSCM2DONE->total_users; ?></td>
+            </tr>
+            
         </table>
     <hr>
     
@@ -151,7 +226,9 @@ function project_info(){
         $nonce = wp_create_nonce(get_current_user_id() . "-projectTableQuery");
      ?>
      <?php echo get_current_user_id() . "-projectTableQuery";?>
-      
+    <script type='text/javascript'>
+     
+    </script>        
     
     <table id='project-table' class='display'>
        
