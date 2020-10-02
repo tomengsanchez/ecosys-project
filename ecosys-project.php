@@ -17,11 +17,14 @@
 
 include_once('installation/ecosys_db_setup.php');
 include_once('ajax/ajax.php');
+include_once('sqls/users.php');
 include_once('project-info.php');
 // Register hook
 register_activation_hook(__FILE__,'db_set');
 
-
+/*
+*Main Function
+*/
 
 function my_enqueue($hook) {
     // Only add to the edit.php admin page.
@@ -66,9 +69,23 @@ function ecosys_project_add_sub_menu(){
 }
 add_action('admin_menu','ecosys_project_add_sub_menu');
 
+/*
+*Main Function
+*/
 
 function ecosys_main_function(){
-    
+    add_role(
+        'ecosys_admin',
+        'Ecosys Admin',
+        [
+            'Manage_Ecosys'         => true,
+            'read_post' =>true,
+            'edit_posts'   => true,
+            'upload_files' => true,
+            'list_users'=>true
+        ]
+    );
+   
     if(array_key_exists('submit_company_name',$_POST)){
         update_option('company_name1',$_POST['company_name1']);
         ?>

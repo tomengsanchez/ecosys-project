@@ -1,5 +1,5 @@
 <?php
- 
+
 add_shortcode('ec_project','project_info');
 function project_info(){
     
@@ -51,146 +51,57 @@ function project_info(){
      
     <?php
 	$result = $wpdb->get_results($showcountQuery);
-	$search_term = $_GET['s'];
-	if(!$_GET['numbers'])
-		$numbers = 50;
-	else
-		$numbers = $_GET['numbers'];
-	$searchQ = array( 
-            'number' => '' . $numbers. '',
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'orderby'=>array('meta_key'=>'nickname'),
-            'order'=>'ASC',
-            'meta_query' => array(
-                    'relation' => 'OR',
-                    array(
-                            'key'     => 'first_name',
-                            'value'   => $search_term,
-                            'compare' => 'LIKE'
-                    ),
-                    array(
-                            'key'     => 'last_name',
-                            'value'   => $search_term,
-                            'compare' => 'LIKE'
-                    ),
-                    array(
-                            'key'     => 'barangay',
-                            'value'   => $search_term ,
-                            'compare' => 'LIKE'
-                    ),
-                    array(
-                            'key'     => 'nickname',
-                            'value'   => $search_term ,
-                            'compare' => 'LIKE'
-                    ),
-                    array(
-                            'key'     => 'paps_status',
-                            'value'   => $search_term ,
-                            'compare' => 'LIKE'
-                    )
-
-            )
-        );
-	$userQuery = new WP_User_Query($searchQ);
-	$result = $userQuery->get_results();
-	$userQuery->total_users;
 	
 	//totalPaps Project
-    $totalPaps = new WP_User_Query(array('meta_key' => 'project', 'meta_value' => '' .$_GET['project'] . ''));
-    $queryRegisterd = array(
-        
-        'meta_key' => 'project', 
-        'meta_value' => '' .$_GET['project'] . '',
-        'meta_key' => 'nickname', 
-        'meta_value' => 'CTBEX2020-000033',
-        'compare'=>'!='
-    );
-    $totalPapsRegistered = new WP_User_Query($queryRegisterd);
+    
+    
+    
     //echo "<pre>" . print_r($userQuery) . "</pre>";
-    $sqlSCM1  = new WP_User_Query(
-        array(
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'meta_key'=> 'paps_status',
-            'meta_value' => 'SCM-1'
-        ));
-    $sqlSCM1  = new WP_User_Query(
-        array(
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'meta_key'=> 'paps_status',
-            'meta_value' => 'SCM-1'
-        ));
-    $sqlSCM1DONE  = new WP_User_Query(
-        array(
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'meta_key'=> 'paps_status',
-            'meta_value' => 'SCM-1-DONE'
-        ));
-    $sqlSES  = new WP_User_Query(
-        array(
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'meta_key'=> 'paps_status',
-            'meta_value' => 'SES'
-        ));
-    $sqlSESDONE  = new WP_User_Query(
-        array(
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'meta_key'=> 'paps_status',
-            'meta_value' => 'SES-DONE'
-        ));
-    $sqlSCM2  = new WP_User_Query(
-        array(
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'meta_key'=> 'paps_status',
-            'meta_value' => 'SCM-2'
-        ));
-    $sqlSCM2  = new WP_User_Query(
-        array(
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'meta_key'=> 'paps_status',
-            'meta_value' => 'SCM-2'
-        ));
-    $sqlSCM2DONE  = new WP_User_Query(
-        array(
-            'meta_key' => 'project', 
-            'meta_value' => '' .$_GET['project'] . '',
-            'meta_key'=> 'paps_status',
-            'meta_value' => 'SCM-2-DONE'
-        ));
+    global $totalRegisteredQ;
+    $totalRegistered = new WP_User_Query( $totalRegisteredQ );
+    global $totalPapsQ;
+    $totalPaps = new WP_User_Query( $totalPapsQ );
+    
+    global $sqlSCM1Q;
+    $sqlSCM1 = new WP_User_Query( $sqlSCM1Q);
+    global $sqlSCM1DONEQ;
+    $sqlSCM1DONE = new WP_User_Query( $sqlSCM1DONEQ);
+    global $sqlSESQ;
+    $sqlSES = new WP_User_Query( $sqlSESQ);
+    global $sqlSESDONEQ;
+    $sqlSESDONE = new WP_User_Query( $sqlSESDONEQ );
+    global $sqlSCM2Q;
+    $sqlSCM2 = new WP_User_Query( $sqlSCM2Q);
+    global $sqlSCM2DONEQ;
+    $sqlSCM2DONE = new WP_User_Query( $sqlSCM2DONEQ );
+    global $searchQ;
+    $userQuery = new WP_User_Query( $searchQ );
+    $result = $userQuery->get_results();
     ?>
-
+        
         <table class='population-table table table-dark table-hover table-responsive-sm'>
             <tr>
-                <th colspan='2'>Population Break Down</th>
+                <th colspan='4'><h4><center>Population Break Down</center></h4></th>
+            </tr>
+            
+            <tr>
+                <th>Total Imported</th><td><?php echo $totalPaps->total_users; ?></td><th>Total Registered <i>(w/Last Name)</i></th><td><?php echo $totalRegistered->total_users; ?></td>
             </tr>
             <tr>
-                <th>Total Imported</th><td><?php echo $totalPaps->total_users; ?></td>
+                <th><h5>Activity</h5></th><th><h5>Current</h5></th><th><h5>Done</h5></th>
             </tr>
             <tr>
-                <th>SCM 1</th><td><?php echo $sqlSCM1->total_users; ?></td>
+                <th>SCM 1</th><td><?php echo $sqlSCM1->total_users; ?></td><td><?php echo $sqlSCM1DONE->total_users; ?></td>
             </tr>
+            
             <tr>
-                <th>SCM 1 DONE</th><td><?php echo $sqlSCM1DONE->total_users; ?></td>
+                <th>SES</th><td><?php echo $sqlSES->total_users; ?></td><td><?php echo $sqlSESDONE->total_users; ?></td>
             </tr>
+            
             <tr>
-                <th>SES</th><td><?php echo $sqlSES->total_users; ?></td>
+                <th>SCM 2</th><td><?php echo $sqlSCM2->total_users; ?></td><td><?php echo $sqlSCM2DONE->total_users; ?></td>
             </tr>
-            <tr>
-                <th>SES DONE</th><td><?php echo $sqlSESDONE->total_users; ?></td>
-            </tr>
-            <tr>
-                <th>SCM 2</th><td><?php echo $sqlSCM2->total_users; ?></td>
-            </tr>
-            <tr>
-                <th>SCM 2 DONE</th><td><?php echo $sqlSCM2DONE->total_users; ?></td>
-            </tr>
+            
             
         </table>
     <hr>
@@ -222,10 +133,7 @@ function project_info(){
             </tr>
         </table>
     </form>                    
-    <?php
-        $nonce = wp_create_nonce(get_current_user_id() . "-projectTableQuery");
-     ?>
-     <?php echo get_current_user_id() . "-projectTableQuery";?>
+    
     <script type='text/javascript'>
      
     </script>        
@@ -264,7 +172,7 @@ function project_info(){
                         <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
-                        <td><?php echo get_user_meta( $res->ID,'last-login',true)?></td>
+                        <td>(<?php echo getUserActivity($res->ID);?>)<?php echo get_user_meta( $res->ID,'last-login',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'last-login-ip',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'default_password',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM1-Q-4',true)?></td>
