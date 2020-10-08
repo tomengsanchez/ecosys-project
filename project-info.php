@@ -50,56 +50,142 @@ function project_info(){
     
      
     <?php
-	$result = $wpdb->get_results($showcountQuery);
+	
 	
 	//totalPaps Project
     
     
     
     //echo "<pre>" . print_r($userQuery) . "</pre>";
-    global $totalRegisteredQ;
-    $totalRegistered = new WP_User_Query( $totalRegisteredQ );
-    global $totalPapsQ;
-    $totalPaps = new WP_User_Query( $totalPapsQ );
+    // global $totalRegisteredQ;
+    // $totalPaps = new WP_User_Query( $totalPapsQ );
     
-    global $sqlSCM1Q;
-    $sqlSCM1 = new WP_User_Query( $sqlSCM1Q);
-    global $sqlSCM1DONEQ;
-    $sqlSCM1DONE = new WP_User_Query( $sqlSCM1DONEQ);
-    global $sqlSESQ;
-    $sqlSES = new WP_User_Query( $sqlSESQ);
-    global $sqlSESDONEQ;
-    $sqlSESDONE = new WP_User_Query( $sqlSESDONEQ );
-    global $sqlSCM2Q;
-    $sqlSCM2 = new WP_User_Query( $sqlSCM2Q);
-    global $sqlSCM2DONEQ;
-    $sqlSCM2DONE = new WP_User_Query( $sqlSCM2DONEQ );
+    ;
     global $searchQ;
     $userQuery = new WP_User_Query( $searchQ );
     $result = $userQuery->get_results();
     ?>
-        
+    
+    <?php $queryNonce = wp_create_nonce(get_current_user_id(  ) . "ajax_query")?>
+    <script type='text/javascript'>
+        jQuery(document).ready(function(){
+            var oldScm2DonePopulation;
+            function papsPopInterval(){
+                
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        "_nonce" : "<?php echo $queryNonce;?>"
+                    },
+                    url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=paps_registered&project=<?php echo $_GET['project']?>',
+                    success:function(r){
+                        $('#totalRegistered').html(r);
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        "_nonce" : "<?php echo $queryNonce;?>"
+                    },
+                    url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=total_paps&project=<?php echo $_GET['project']?>',
+                    success:function(r){
+                        $('#totalPaps').html(r);
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        "_nonce" : "<?php echo $queryNonce;?>"
+                    },
+                    url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1&project=<?php echo $_GET['project']?>',
+                    success:function(r){
+                        $('#scm1').html(r);
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        "_nonce" : "<?php echo $queryNonce;?>"
+                    },
+                    url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1DONE&project=<?php echo $_GET['project']?>',
+                    success:function(r){
+                        $('#scm1DONE').html(r);
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        "_nonce" : "<?php echo $queryNonce;?>"
+                    },
+                    url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=ses&project=<?php echo $_GET['project']?>',
+                    success:function(r){
+                        $('#ses').html(r);
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        "_nonce" : "<?php echo $queryNonce;?>"
+                    },
+                    url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=ses_done&project=<?php echo $_GET['project']?>',
+                    success:function(r){
+                        $('#sesDONE').html(r);
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        "_nonce" : "<?php echo $queryNonce;?>"
+                    },
+                    url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm2&project=<?php echo $_GET['project']?>',
+                    success:function(r){
+                        $('#scm2').html(r);
+                        
+                    }
+                });
+                $.ajax({
+                    type:'POST',
+                    data:{
+                        "_nonce" : "<?php echo $queryNonce;?>"
+                    },
+                    url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm2_done&project=<?php echo $_GET['project']?>',
+                    success:function(r){
+                        $('#scm2DONE').html(r);
+                        oldScm2DonePopulation = r;
+                    }
+                });
+                
+            }
+            papsPopInterval();
+            
+
+            // setInterval(function(){
+            //     papsPopInterval();
+            // },10000);
+        });
+    </script>    
+    
         <table class='population-table table table-dark table-hover table-responsive-sm'>
             <tr>
-                <th colspan='4'><h4><center>Population Break Down</center></h4></th>
+                <th colspan='3'><h4><center>Population Break Down</center></h4></th>
             </tr>
             
             <tr>
-                <th>Total Imported</th><td><?php echo $totalPaps->total_users; ?></td><th>Total Registered <i>(w/Last Name)</i></th><td><?php echo $totalRegistered->total_users; ?></td>
+                <th>Total Imported</th><td><span id='totalPaps'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><th>Total Registered <i>(w/Last Name)</i></th><td ><span id='totalRegistered'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td>
             </tr>
             <tr>
                 <th><h5>Activity</h5></th><th><h5>Current</h5></th><th><h5>Done</h5></th>
             </tr>
             <tr>
-                <th>SCM 1</th><td><?php echo $sqlSCM1->total_users; ?></td><td><?php echo $sqlSCM1DONE->total_users; ?></td>
+                <th>SCM 1</th><td><span id='scm1'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='scm1DONE' ><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td>
             </tr>
             
             <tr>
-                <th>SES</th><td><?php echo $sqlSES->total_users; ?></td><td><?php echo $sqlSESDONE->total_users; ?></td>
+                <th>SES</th><td><span id='ses'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='sesDONE'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td>
             </tr>
             
             <tr>
-                <th>SCM 2</th><td><?php echo $sqlSCM2->total_users; ?></td><td><?php echo $sqlSCM2DONE->total_users; ?></td>
+                <th>SCM 2</th><td><span id='scm2'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='scm2DONE'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td>
             </tr>
             
             

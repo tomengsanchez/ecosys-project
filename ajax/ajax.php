@@ -101,3 +101,220 @@ function sample_datatable_ajax(){
     die();
     
 }
+add_action( 'wp_ajax_paps_registered', 'f_paps_registered' );
+
+function f_paps_registered(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $totalRegisteredQ;
+    global $wpdb;
+    $sql = "SELECT count(*) 
+                FROM " . $wpdb->prefix . "users 
+                INNER JOIN " . $wpdb->prefix . "usermeta 
+                    ON ( " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt1 
+                    ON ( " . $wpdb->prefix . "users.ID = mt1.user_id ) WHERE 1=1 
+                    AND (
+                            ( " . $wpdb->prefix . "usermeta.meta_key = 'project' AND " . $wpdb->prefix . "usermeta.meta_value = '" . $_GET['project'] . "' ) 
+                            AND ( mt1.meta_key = 'last_name' AND mt1.meta_value != '' ) 
+                        ) 
+            ORDER BY user_login ASC";
+    //$totalRegistered = new WP_User_Query( $totalRegisteredQ );
+    $cnt = $wpdb->get_var($sql);
+    echo $cnt;
+    die();
+}
+
+add_action( 'wp_ajax_total_paps', 'f_total_paps' );
+
+function f_total_paps1(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $totalPapsQ;
+    $totalPaps = new WP_User_Query( $totalPapsQ );
+    echo $totalPaps->total_users;
+    die();
+}
+
+function f_total_paps(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $wpdb;
+    $cnt = $wpdb->get_var( "SELECT count(*) as cnt FROM " . $wpdb->prefix . "users INNER JOIN " . $wpdb->prefix . "usermeta ON ( " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id ) WHERE 1=1 AND ( ( " . $wpdb->prefix . "usermeta.meta_key = 'project' AND " . $wpdb->prefix . "usermeta.meta_value = '" . $_GET['project'] . "' ) ) ORDER BY user_login ASC" );
+    echo $cnt;
+    
+    die();
+}
+
+add_action( 'wp_ajax_scm1', 'f_scm1' );
+
+function f_scm1(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $wpdb;
+    $sql = "SELECT count(*)
+                FROM " . $wpdb->prefix . "users 
+                INNER JOIN " . $wpdb->prefix . "usermeta 
+                    ON ( " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt1 
+                    ON ( " . $wpdb->prefix . "users.ID = mt1.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt2 
+                    ON ( " . $wpdb->prefix . "users.ID = mt2.user_id ) WHERE 1=1 
+                    AND (
+                            ( " . $wpdb->prefix . "usermeta.meta_key = 'project' AND " . $wpdb->prefix . "usermeta.meta_value = '" . $_GET['project'] . "' ) 
+                            AND ( mt1.meta_key = 'paps_status' AND mt1.meta_value = 'SCM-1' ) 
+                            AND ( mt2.meta_key = 'last_name' AND mt2.meta_value != '' ) 
+                        ) 
+                ORDER BY user_login ASC";
+    //$totalRegistered = new WP_User_Query( $totalRegisteredQ );
+    $cnt = $wpdb->get_var($sql);
+    echo $cnt;
+    die();
+}
+add_action( 'wp_ajax_scm1DONE', 'f_scm1DONE' );
+
+function f_scm1DONE(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $wpdb;
+    $sql = "SELECT count(*)
+                FROM " . $wpdb->prefix . "users 
+                INNER JOIN " . $wpdb->prefix . "usermeta 
+                    ON ( " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt1 
+                    ON ( " . $wpdb->prefix . "users.ID = mt1.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt2 
+                    ON ( " . $wpdb->prefix . "users.ID = mt2.user_id ) WHERE 1=1 
+                    AND (
+                            ( " . $wpdb->prefix . "usermeta.meta_key = 'project' AND " . $wpdb->prefix . "usermeta.meta_value = '" . $_GET['project'] . "' ) 
+                            AND ( mt1.meta_key = 'paps_status' AND mt1.meta_value = 'SCM-1-DONE' ) 
+                            AND ( mt2.meta_key = 'last_name' AND mt2.meta_value != '' ) 
+                        ) 
+                ORDER BY user_login ASC";
+    //$totalRegistered = new WP_User_Query( $totalRegisteredQ );
+    $cnt = $wpdb->get_var($sql);
+    echo $cnt;
+    die();
+}
+
+
+add_action( 'wp_ajax_ses', 'f_ses' );
+
+function f_ses(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $wpdb;
+    $sql = "SELECT count(*)
+                FROM " . $wpdb->prefix . "users 
+                INNER JOIN " . $wpdb->prefix . "usermeta 
+                    ON ( " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt1 
+                    ON ( " . $wpdb->prefix . "users.ID = mt1.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt2 
+                    ON ( " . $wpdb->prefix . "users.ID = mt2.user_id ) WHERE 1=1 
+                    AND (
+                            ( " . $wpdb->prefix . "usermeta.meta_key = 'project' AND " . $wpdb->prefix . "usermeta.meta_value = '" . $_GET['project'] . "' ) 
+                            AND ( mt1.meta_key = 'paps_status' AND mt1.meta_value = 'SES' ) 
+                            AND ( mt2.meta_key = 'last_name' AND mt2.meta_value != '' ) 
+                        ) 
+                ORDER BY user_login ASC";
+    //$totalRegistered = new WP_User_Query( $totalRegisteredQ );
+    $cnt = $wpdb->get_var($sql);
+    echo $cnt;
+    echo $sqlSES->total_users;
+    die();
+}
+add_action( 'wp_ajax_ses_done', 'f_ses_done' );
+
+function f_ses_done(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $wpdb;
+    $sql = "SELECT count(*)
+                FROM " . $wpdb->prefix . "users 
+                INNER JOIN " . $wpdb->prefix . "usermeta 
+                    ON ( " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt1 
+                    ON ( " . $wpdb->prefix . "users.ID = mt1.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt2 
+                    ON ( " . $wpdb->prefix . "users.ID = mt2.user_id ) WHERE 1=1 
+                    AND (
+                            ( " . $wpdb->prefix . "usermeta.meta_key = 'project' AND " . $wpdb->prefix . "usermeta.meta_value = '" . $_GET['project'] . "' ) 
+                            AND ( mt1.meta_key = 'paps_status' AND mt1.meta_value = 'SES-DONE' ) 
+                            AND ( mt2.meta_key = 'last_name' AND mt2.meta_value != '' ) 
+                        ) 
+                ORDER BY user_login ASC";
+    //$totalRegistered = new WP_User_Query( $totalRegisteredQ );
+    $cnt = $wpdb->get_var($sql);
+    echo $cnt;
+    die();
+}
+add_action( 'wp_ajax_scm2', 'f_scm2' );
+
+function f_scm2(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $wpdb;
+    $sql = "SELECT count(*)
+                FROM " . $wpdb->prefix . "users 
+                INNER JOIN " . $wpdb->prefix . "usermeta 
+                    ON ( " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt1 
+                    ON ( " . $wpdb->prefix . "users.ID = mt1.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt2 
+                    ON ( " . $wpdb->prefix . "users.ID = mt2.user_id ) WHERE 1=1 
+                    AND (
+                            ( " . $wpdb->prefix . "usermeta.meta_key = 'project' AND " . $wpdb->prefix . "usermeta.meta_value = '" . $_GET['project'] . "' ) 
+                            AND ( mt1.meta_key = 'paps_status' AND mt1.meta_value = 'SCM-2' ) 
+                            AND ( mt2.meta_key = 'last_name' AND mt2.meta_value != '' ) 
+                        ) 
+                ORDER BY user_login ASC";
+    //$totalRegistered = new WP_User_Query( $totalRegisteredQ );
+    $cnt = $wpdb->get_var($sql);
+    echo $cnt;
+   
+    die();
+}
+add_action( 'wp_ajax_scm2_done', 'f_scm2_done' );
+
+function f_scm2_done(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $wpdb;
+    $sql = "SELECT count(*)
+                FROM " . $wpdb->prefix . "users 
+                INNER JOIN " . $wpdb->prefix . "usermeta 
+                    ON ( " . $wpdb->prefix . "users.ID = " . $wpdb->prefix . "usermeta.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt1 
+                    ON ( " . $wpdb->prefix . "users.ID = mt1.user_id ) 
+                INNER JOIN " . $wpdb->prefix . "usermeta AS mt2 
+                    ON ( " . $wpdb->prefix . "users.ID = mt2.user_id ) WHERE 1=1 
+                    AND (
+                            ( " . $wpdb->prefix . "usermeta.meta_key = 'project' AND " . $wpdb->prefix . "usermeta.meta_value = '" . $_GET['project'] . "' ) 
+                            AND ( mt1.meta_key = 'paps_status' AND mt1.meta_value = 'SCM-2-DONE' ) 
+                            AND ( mt2.meta_key = 'last_name' AND mt2.meta_value != '' ) 
+                        ) 
+                ORDER BY user_login ASC";
+    //$totalRegistered = new WP_User_Query( $totalRegisteredQ );
+    $cnt = $wpdb->get_var($sql);
+    echo $cnt;
+    die();
+}
