@@ -16,6 +16,7 @@
 //DB installation
 
 include_once('installation/ecosys_db_setup.php');
+include_once('inc/functions.php');
 include_once('ajax/ajax.php');
 include_once('sqls/users.php');
 include_once('project-info.php');

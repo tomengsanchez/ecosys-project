@@ -63,6 +63,9 @@ function project_info(){
     ;
     global $searchQ;
     $userQuery = new WP_User_Query( $searchQ );
+    //echo $userQuery->request;
+
+    
     $result = $userQuery->get_results();
     ?>
     
