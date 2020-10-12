@@ -11,19 +11,22 @@ function db_set(){
         project_scm1 TEXT(500) NOT NULL,
         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )';
+    
+    $tb = $wpdb->prefix . "ec_pm_projects";
+
+    $queryTracker = 'CREATE TABLE '. $tb .' (
+            id INT(30) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            user_id VARCHAR(30) NOT NULL,
+            project VARCHAR(30) NOT NULL,
+            full_name VARCHAR(50) NOT NULL,
+            time varchar(30) NOT NULL,
+            date varchar(30) NOT NULL,
+            read varchar(30) NOT NULL,
+            )';
     require_once(ABSPATH . "wp-admin/includes/upgrade.php");
     dbDelta($query);
+    dbDelta($queryTracker);
 
-
-    $wpdb->insert( 
-        $tb, 
-        array( 
-            'project_prefix' => 'SAMPLE', 
-            'project_name' => 'This is an Example Project', 
-            'project_description' => 'This is the description', 
-            'project_scm1' => 'This is the description', 
-        ) 
-    );
 }
 
  ?>
