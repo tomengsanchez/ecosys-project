@@ -50,6 +50,15 @@ function get_paps_count($status){
     
 }
 
-
-
- ?>
+/**
+ * GEt the project Activity
+ * 
+ * @param $project project prefix  
+ */
+function get_project_activity($project){
+    global $wpdb;
+    $sql = "SELECT count(*) from " . $wpdb->prefix. "ec_pm_activity_logger where project='" . $project. "'";
+    $cnt = $wpdb->get_var($sql);
+    return $cnt;
+}
+?>

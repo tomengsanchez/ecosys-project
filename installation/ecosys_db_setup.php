@@ -21,7 +21,7 @@ function db_set(){
             full_name VARCHAR(50) NOT NULL,
             time varchar(30) NOT NULL,
             date varchar(30) NOT NULL,
-            read varchar(30) NOT NULL,
+            _read varchar(30) NOT NULL,
             )';
     require_once(ABSPATH . "wp-admin/includes/upgrade.php");
     dbDelta($query);

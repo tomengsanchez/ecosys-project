@@ -156,7 +156,7 @@ function ecosys_main_function(){
             $results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}ec_pm_projects", OBJECT );
             foreach ($results as $res){
                 echo "<tr>";
-                echo "<td>" . $res->project_prefix. "</td>";
+                echo "<td>" . $res->project_prefix. "(" . get_project_activity($res->project_prefix). ")</td>";
                 echo "<td>" . $res->project_name. "</td>";
                 echo "<td>" . $res->project_description. "</td>";
                 echo "<td><a href='" . get_site_url() . "/wp-admin/admin.php?page=project-info&project=" . $res->project_prefix . "'> Info</a></td>";
