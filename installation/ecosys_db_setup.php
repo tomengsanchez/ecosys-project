@@ -12,10 +12,10 @@ function db_set(){
         reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )';
     
-    $tb = $wpdb->prefix . "ec_pm_projects";
+    $tb = $wpdb->prefix . "ec_pm_login_tracker";
 
     $queryTracker = 'CREATE TABLE '. $tb .' (
-            id INT(30) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT(30) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id VARCHAR(30) NOT NULL,
             project VARCHAR(30) NOT NULL,
             full_name VARCHAR(50) NOT NULL,
@@ -24,8 +24,21 @@ function db_set(){
             _read varchar(30) NOT NULL,
             )';
     require_once(ABSPATH . "wp-admin/includes/upgrade.php");
+    
+    $tb = $wpdb->prefix . "ec_pm_activity_logger";
+    $queryActivity = 'CREATE TABLE '. $tb .' (
+        id BIGINT(30) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        user_id VARCHAR(30) NOT NULL,
+        type VARCHAR(20) NOT NULL,
+        _read VARCHAR(20) NOT NULL,
+        project VARCHAR(20) NOT NULL
+        )';
+    require_once(ABSPATH . "wp-admin/includes/upgrade.php");
+
     dbDelta($query);
     dbDelta($queryTracker);
+    dbDelta($queryActivity);
+
 
 }
 
