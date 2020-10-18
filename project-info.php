@@ -25,51 +25,40 @@ function project_info(){
     $project_info = $wpdb->get_row($q);
 
     ?>
-    <hr>
-    <a class='button button-secondary' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=ecosys-project-page'>Back to Project Management</a>
+    <nav class='navbar navbar-expand-lg navbar-light bg-light' style='width:99%'>
+        <div class='collapse navbar-collapse'>
+            <ul class='navbar-nav  mr-auto'>
+                <li class='nav-item'>
+                    <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=ecosys-project-page'><span class="dashicons dashicons-arrow-left-alt" style='padding-top:5px'></span>Back</a>
+                </li>
+                <li class='nav-item'>
+                    <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>'><span class="dashicons dashicons-chart-area" style='padding-top:5px'></span>Data</a>
+                </li>
+                <li class='nav-item'>
+                    <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=search'><span class="dashicons dashicons-search" style='padding-top:5px'></span>Search Paps</a>
+                </li>
+                
+                <li class='nav-item'>
+                    <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=settings'><span class="dashicons dashicons-admin-generic" style='padding-top:5px'></span>Settings</a>
+                </li>
+            </ul>
+        </div>
+    
+        
+    </nav>
+    <?php
+    /**
+     * Page organizing Condition
+     *  */ 
+
+    if($_GET['tab'] == ''){
+    //    echo "Data";
+    ?>
     <hr>
     <div container>
         <div class='row'>
             <div class='col'>
-                <form action='' method='POST'>
-                    <table class='table table-secondary'>
-                        <tr>
-                            <th colspan='3'><h4><center>Project Information</center></h4></th>
-                        </tr>
-                        <tr>
-                            <th>Project Prefix</th><td><input type='text' name='proj_prefix' required value='<?php echo $project_info->project_prefix?>' disabled></td>
-                        </tr>
-                        <tr>
-                            <th>Project Name</th><td><input type='text' name='proj_name' required value='<?php echo $project_info->project_name?>' size='50'></td>
-                        </tr>
-                        <tr>
-                            <th>Project Description</th><td><textarea name='project_descrption' required   ><?php echo $project_info->project_description?></textarea></td>
-                        </tr>
-                        <tr>
-                            <th></th><td><input type='submit' name='submit_edit' value='update' class='button button-primary'> </td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
-            <div class='col'>
                 <?php
-                
-                
-                //totalPaps Project
-                
-                
-                
-                //echo "<pre>" . print_r($userQuery) . "</pre>";
-                // global $totalRegisteredQ;
-                // $totalPaps = new WP_User_Query( $totalPapsQ );
-                
-                ;
-                global $searchQ;
-                $userQuery = new WP_User_Query( $searchQ );
-                //echo $userQuery->request;
-
-                
-                $result = $userQuery->get_results();
                 ?>
                 
                 <?php $queryNonce = wp_create_nonce(get_current_user_id(  ) . "ajax_query")?>
@@ -86,7 +75,7 @@ function project_info(){
                         // },10000);
                     });
                 </script>    
-                <table class='population-table table table-secondary table-hover table-responsive-sm'>
+                <table class='population-table table table-hover table-responsive-sm'>
                     <tr>
                         <th colspan='3'><h4><center>Population Break Down</center></h4></th>
                     </tr>
@@ -110,32 +99,67 @@ function project_info(){
                     </tr>
                 </table>
             </div>
+            <div class='col'>
+                <canvas id="totalPopulation"  style='margin-left:-150px;width:130px;height:65px'></canvas>
+            </div>
         </div>
     </div>
     <hr>
     <div class='container'>
         <div class='row'>
             <div class='col'>
-                <canvas id="totalPopulation" width="300" height="150" style='margin-left:-100px'></canvas>
+                <span class='h4'>Current</span>
+            <canvas id="currentChart" width="300" height="150" style='margin-left:-150px'></canvas>
                 
             </div>
             <div class='col'>
-                <canvas id="myChart" width="300" height="150" style='margin-left:-100px'></canvas>
+                <span class='h4'>Done</span>
+                <canvas id="myChart1" width="300" height="150" style='margin-left:-150px'></canvas>
             </div>
         </div>
        
         <script>
-            
             $(document).ready(function(){
                 //barchart
+                var ctx = document.getElementById('currentChart');
+                var currentChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['SCM1', 'SES', 'SCM2'],
+                        datasets: [{
+                            label: '# of Paps Done',
+                            //data: [12, 19, 3, 5, 2, 3],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
                 var chartsSCM1 = 0;
                 var ctx = document.getElementById('totalPopulation');
                 var totPop = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Total Control Number', 'Registered'],
+                        labels: ['Total Control Number', 'Registered w/ LastName'],
                         datasets: [{
-                            label: '# of Paps',
+                            label: [],
                             //data: [12, 19, 3, 5, 2, 3],
                             backgroundColor: [
                                 'rgba(52, 118, 240, 0.2)',
@@ -159,7 +183,7 @@ function project_info(){
                     }
                 });
                 //Pie CHart
-                var ctx = document.getElementById('myChart');
+                var ctx = document.getElementById('myChart1');
                 var myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
@@ -224,6 +248,8 @@ function project_info(){
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#scm1').html(r);
+                            currentChart.data.datasets[0].data[0] = r;
+                            currentChart.update();
                         }
                     });
                     $.ajax({
@@ -247,6 +273,8 @@ function project_info(){
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=ses&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#ses').html(r);
+                            currentChart.data.datasets[0].data[1] = r;
+                            currentChart.update();
                         }
                     });
                     $.ajax({
@@ -259,6 +287,7 @@ function project_info(){
                             $('#sesDONE').html(r);
                             myChart.data.datasets[0].data[1] = r;
                             myChart.update();
+
                         }
                     });
                     $.ajax({
@@ -269,6 +298,8 @@ function project_info(){
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm2&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#scm2').html(r);
+                            currentChart.data.datasets[0].data[2] = r;
+                            currentChart.update();
                             
                         }
                     });
@@ -295,10 +326,21 @@ function project_info(){
             });
             
         </script>
-        
+
     </div>
+  
+    <?php
+    }
+    else if($_GET['tab'] == 'search'){
+        global $searchQ;
+        $userQuery = new WP_User_Query( $searchQ );
+        //echo $userQuery->request;
+
+        
+        $result = $userQuery->get_results();
+    ?>
     <hr>
-    <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=NSCR' method='GET'>
+    <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info' method='GET'>
         <table>
             <tr>
                 
@@ -317,16 +359,13 @@ function project_info(){
                     </select>
                      of <?php echo $userQuery->total_users; ?><h4>
                 </td>
-                <td><input type='hidden' name='page' value='project-info'><input type='hidden' name='project' value='<?php echo $_GET['project'] ?>'><h4>Search Keyword</h4>
+                <td><input type='hidden' name='page' value='project-info'><input type='hidden' name='tab' value='search'><input type='hidden' name='project' value='<?php echo $_GET['project'] ?>'><h4>Search Keyword</h4>
                 </td><td><input type='text' name='s' value='<?php echo $search_term ?>'></td>
                 <td><input type='submit' name='submit_search' value='Search/Update Table'></td>
                 <td><h4>Search Results</h4></td><td><?php echo $userQuery->total_users; ?></td>
             </tr>
         </table>
     </form>                    
-    
-    
-    
     <table id='project-table' class='display'>
        
         <thead>
@@ -372,9 +411,44 @@ function project_info(){
              ?>
         </tbody>
     </table>
+    <?php 
+    }//end search
+    else if($_GET['tab'] == 'settings'){
+        
+        
+    ?>
+    <div class='container'>
+        <div class='row'>
+            <div class='col'>
+                <form action='' method='POST'>
+                    <table class='table table-secondary'>
+                        <tr>
+                            <th colspan='3'><h4><center>Project Information</center></h4></th>
+                        </tr>
+                        <tr>
+                            <th>Project Prefix</th><td><input type='text' name='proj_prefix' required value='<?php echo $project_info->project_prefix?>' disabled></td>
+                        </tr>
+                        <tr>
+                            <th>Project Name</th><td><input type='text' name='proj_name' required value='<?php echo $project_info->project_name?>' size='50'></td>
+                        </tr>
+                        <tr>
+                            <th>Project Description</th><td><textarea name='project_descrption' required   ><?php echo $project_info->project_description?></textarea></td>
+                        </tr>
+                        <tr>
+                            <th></th><td><input type='submit' name='submit_edit' value='update' class='button button-primary'> </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class='col'>
+            </div>
+        </div>
+    </div>
     
     <?php
-    
-    //print_r($_POST);
+    }//end settings
+    else if($_GET['tab' == 'events']){
+        echo "Events";
+    }
 }
 ?>

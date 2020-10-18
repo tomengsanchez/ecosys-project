@@ -37,59 +37,67 @@ function my_enqueue($hook) {
     <?php
     wp_enqueue_style('bs-css', plugin_dir_url(__FILE__) . 'bootstrap-4.3.1/css/bootstrap.css');
     wp_enqueue_style('dt-css', plugin_dir_url(__FILE__) . 'Datatable/datatables.css');
-    wp_enqueue_style('eco-charts-css', plugin_dir_url(__FILE__) . 'charts/chart.min.css');
+    //wp_enqueue_style('eco-charts-css', plugin_dir_url(__FILE__) . 'charts/chart.min.css');
     wp_enqueue_style('ecosyscss', plugin_dir_url(__FILE__) . 'css/ecosys.css');
 
     //wp_enqueue_script('dt-jquery-ecosys', plugin_dir_url(__FILE__) . 'jqjs/jquery.min.js');
     wp_enqueue_script('dt-datatable-eco', plugin_dir_url(__FILE__) . 'Datatable/datatables.min.js','','');
     wp_enqueue_script('bs-js', plugin_dir_url(__FILE__) . 'bootstrap-4.3.1/js/bootstrap.js','','');
-    wp_enqueue_script('eco-charts-js', plugin_dir_url(__FILE__) . 'charts/chart.min.js');
+    //wp_enqueue_script('eco-charts-js', plugin_dir_url(__FILE__) . 'charts/chart.min.js');
     wp_enqueue_script('ecosysjs', plugin_dir_url(__FILE__) . 'js/ecosys.js','','',true);
 }
-function datatable_cdn(){
-    ?>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.22/af-2.3.5/b-1.6.4/b-colvis-1.6.4/b-flash-1.6.4/b-html5-1.6.4/b-print-1.6.4/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.0/sp-1.2.0/sl-1.3.1/datatables.min.css"/>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/jszip-2.5.0/dt-1.10.22/af-2.3.5/b-1.6.4/b-colvis-1.6.4/b-flash-1.6.4/b-html5-1.6.4/b-print-1.6.4/cr-1.5.2/fc-3.3.1/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.0/sp-1.2.0/sl-1.3.1/datatables.min.js"></script>
-   
- 
-    <?php
 
+function cdns(){
+    ?>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+    <?php
 }
 if($_GET['page']=='project-info'){
     add_action('admin_enqueue_scripts', 'my_enqueue');
-    //add_action('admin_head','datatable_cdn');
+    add_action('admin_head','cdns');
 }
 
 
 function ecosys_project_add_menu(){
-    add_menu_page('Ecosys Project Management','Ecosys Project Manager','manage_options','ecosys-project-page','ecosys_main_function','dashicons-welcome-widgets-menus','200');
+    add_menu_page('Ecosys Project Management','Ecosys Project Manager','manage_ecosys_project','ecosys-project-page','ecosys_main_function','dashicons-welcome-widgets-menus','200');
 }
 add_action('admin_menu','ecosys_project_add_menu');
 
 //submenu for projects
 function ecosys_project_add_sub_menu(){
-    add_submenu_page( 'ecosys-project-page1','Project Information', 'Poject', 'manage_options', 'project-info','project_info', 1);
+    add_submenu_page( 'ecosys-project-page1','Project Information', 'Poject', 'manage_ecosys_project', 'project-info','project_info', 1);
 }
 add_action('admin_menu','ecosys_project_add_sub_menu');
 
 /*
 *Main Function
 */
-
-function ecosys_main_function(){
+function wporg_simple_role_caps() {
+    // Gets the simple_role role object.
+    $role = get_role( 'administrator' );
+ 
+    // Add a new capability.
+    $role->add_cap( 'manage_ecosys_project', true );
+}
+add_action( 'init', 'wporg_simple_role_caps', 11 );
+function add_role_eco(){
     add_role(
-        'ecosys_admin',
-        'Ecosys Admin',
+        'ecosys_admin1',
+        'Ecosys Admin1',
         [
-            'Manage_Ecosys'         => true,
+            'manage_ecosys_project'         => true,
             'read_post' =>true,
             'edit_posts'   => true,
             'upload_files' => true,
-            'list_users'=>true
+            'list_users'=>true,
+            'edit_users'=>true,
         ]
     );
+}
+add_action( 'init', 'add_role_eco', 11 );
+function ecosys_main_function(){
+    
+    
    
     if(array_key_exists('submit_company_name',$_POST)){
         update_option('company_name1',$_POST['company_name1']);
@@ -161,7 +169,11 @@ function ecosys_main_function(){
                 echo "<td>" . $res->project_prefix. "(" . get_project_activity($res->project_prefix). ")</td>";
                 echo "<td>" . $res->project_name. "</td>";
                 echo "<td>" . $res->project_description. "</td>";
-                echo "<td><a href='" . get_site_url() . "/wp-admin/admin.php?page=project-info&project=" . $res->project_prefix . "'> Info</a></td>";
+                echo "<td>";
+                    echo"<a  href='" . get_site_url() . "/wp-admin/admin.php?page=project-info&project=" . $res->project_prefix . "'><span alt='Data' class='dashicons dashicons-chart-area' style='padding-right:10px;font-size:25px'></a>";
+                    echo"<a alt='Search Paps' href='" . get_site_url() . "/wp-admin/admin.php?page=project-info&project=" . $res->project_prefix . "&tab=search'><span class='dashicons dashicons-search' style='padding-right:10px;font-size:25px'></span></a> ";
+                    echo"<a alt='Settings' href='" . get_site_url() . "/wp-admin/admin.php?page=project-info&project=" . $res->project_prefix . "&tab=settings'><span class='dashicons dashicons-admin-generic' style='padding-right:10px;font-size:25px'></span></a> ";
+                echo"</td>";
                 echo "</tr>";
             }
 
