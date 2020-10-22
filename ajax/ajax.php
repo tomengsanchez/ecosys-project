@@ -88,3 +88,62 @@ function f_scm2_done(){
 
 //END Ajax Data Of Population Breakdown
 
+//Begin Ajax of User Entries
+
+add_action( 'wp_ajax_get_entries_by_form', 'get_entries_by_form' );
+function get_entries_by_form(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    global $wpdb;
+    global $sqlCountTotalEntries;
+    $result = $wpdb->get_results($sqlCountTotalEntries);
+    $sqlCountTotalEntries;
+    if($result){
+        ?>
+        <table class='table'>
+            <tr>
+                <th>Form Name</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Modified</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <?php
+            foreach($result as $res){
+            ?>
+            <tr>
+                <td><?php echo $res->post_title?></td>
+                <?php
+                if(!$res->status)
+                    $status ='completed';
+                else
+                    $status = 'abandoned';
+                
+                ?>
+                <td><?php echo ucfirst($status)?></td>
+                <td><?php echo $res->date?></td>
+                <td><?php echo $res->date_modified?></td>
+                <td><a href='<?php echo get_admin_url()?>admin.php?page=wpforms-entries&view=details&entry_id=1' target="_new">View</a></td>
+                <td><a href='<?php echo get_admin_url()?>admin.php?page=wpforms-entries&view=edit&entry_id=1' target="_new">Edit</a></td>
+            </tr>
+            <?php
+            }//foreach1 
+            ?>
+        </table>
+        <?php
+    }
+    else{
+    ?>
+        <div class='alert alert-secondary' role='alert'>
+            No Ses Entries For This Paps.<br>
+            Maybe this paps has been interview through Onsite SES
+        </div>
+    <?php
+    }
+    ?>
+    <?php
+    die();
+}

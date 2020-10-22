@@ -25,6 +25,7 @@ function project_info(){
     $project_info = $wpdb->get_row($q);
 
     ?>
+    <h4>Project : <?php echo $_GET['project'] ?> </h4>
     <nav class='navbar navbar-expand-lg navbar-light bg-light' style='width:99%'>
         <div class='collapse navbar-collapse'>
             <ul class='navbar-nav  mr-auto'>
@@ -37,15 +38,16 @@ function project_info(){
                 <li class='nav-item'>
                     <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=search'><span class="dashicons dashicons-search" style='padding-top:5px'></span>Search Paps</a>
                 </li>
-                
+                <li class='nav-item'>
+                    <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=activities'><span class="dashicons dashicons-list-view" style='padding-top:5px'></span>Activities</a>
+                </li>
                 <li class='nav-item'>
                     <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=settings'><span class="dashicons dashicons-admin-generic" style='padding-top:5px'></span>Settings</a>
                 </li>
             </ul>
         </div>
-    
-        
     </nav>
+    
     <?php
     /**
      * Page organizing Condition
@@ -53,6 +55,7 @@ function project_info(){
 
     if($_GET['tab'] == ''){
     //    echo "Data";
+    
     ?>
     <hr>
     <div container>
@@ -322,7 +325,7 @@ function project_info(){
                 setInterval(function(){
                     papsPopInterval();
                 }, 10000);        
-                
+               
             });
             
         </script>
@@ -335,11 +338,50 @@ function project_info(){
         global $searchQ;
         $userQuery = new WP_User_Query( $searchQ );
         //echo $userQuery->request;
-
+        $queryNonce = wp_create_nonce(get_current_user_id(  ) . "ajax_query");
         
         $result = $userQuery->get_results();
     ?>
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            
+            $('.ses_button').click(function(){
+                var title = "SES Entries for "  + $(this).attr('full_name');
+                $('#ses_modal').modal('toggle');
+                $('.modal-title').html(title);
+                $('#ses_modal .modal-dialog .modal-content .modal-body').html('<div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div>');
+                user_id= $(this).attr('user_id');
+                $.ajax({
+                    type:'POST',
+                    data : {
+                        "_nonce" : "<?php echo $queryNonce;?>",
+                        uid:user_id
+                    },
+                    url : '<?php echo get_admin_url( )?>/admin-ajax.php?action=get_entries_by_form',
+                    success:function(r){
+                        
+                        $('#ses_modal .modal-dialog .modal-content .modal-body').html(r);
+                    }
+                });
+            });
+        });
+    </script>
     <hr>
+    <div class='modal fade' id='ses_modal' role='dialog'>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-header'>
+                    <h5 class="modal-title" id="exampleModalLongTitle">SES entries</h5>
+                </div>
+                <div class='modal-body'>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
     <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info' method='GET'>
         <table>
             <tr>
@@ -360,9 +402,9 @@ function project_info(){
                      of <?php echo $userQuery->total_users; ?><h4>
                 </td>
                 <td><input type='hidden' name='page' value='project-info'><input type='hidden' name='tab' value='search'><input type='hidden' name='project' value='<?php echo $_GET['project'] ?>'><h4>Search Keyword</h4>
-                </td><td><input type='text' name='s' value='<?php echo $search_term ?>'></td>
+                </td><td><input type='text' name='s' value='<?php echo $_GET['s'] ?>'></td>
                 <td><input type='submit' name='submit_search' value='Search/Update Table'></td>
-                <td><h4>Search Results</h4></td><td><?php echo $userQuery->total_users; ?></td>
+                <td><h4>Search Results <?php if($_GET['s']){echo "for '" . $_GET['s'] . "':" ;}?> <?php echo $userQuery->total_users; ?></h4></td>
             </tr>
         </table>
     </form>                    
@@ -378,7 +420,7 @@ function project_info(){
                 <th>Barangay</th>
                 <th>City</th>
                 <th>Last Login</th>
-                <th>Last Login Ip</th>
+                <th>Ses Entries</th>
                 <th>Default Password</th>
                 <th>SCM1 Question</th>
                 <th>SCM2 Question</th>
@@ -393,7 +435,7 @@ function project_info(){
                 foreach($result as $res){
                     ?>
                     <tr>
-                        <td><a clas='link' style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
+                        <td><a class='button' style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
                         <td><?php echo get_user_meta( $res->ID,'last_name',true)?></td>
                         <td><?php echo $res->first_name?></td>
                         <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
@@ -401,7 +443,7 @@ function project_info(){
                         <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
                         <td>(<?php echo getUserActivity($res->ID);?>)<?php echo get_user_meta( $res->ID,'last-login',true)?></td>
-                        <td><?php echo get_user_meta( $res->ID,'last-login-ip',true)?></td>
+                        <td><span class='button ses_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->first_name?> <?php echo $res->last_name?>'><?php echo get_total_ses_entries($res->ID); ?></span></td>
                         <td><?php echo get_user_meta( $res->ID,'default_password',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM1-Q-4',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM2-Q-4',true)?></td>
@@ -416,6 +458,25 @@ function project_info(){
     else if($_GET['tab'] == 'settings'){
         
         
+        //print_r($project_info);
+        if($_POST['submit_edit']){
+            global $wpdb;
+        $tb = $wpdb->prefix . "ec_pm_projects";
+            $wpdb->update( 
+                $tb, 
+                array( 
+                    'project_name' => $_POST['proj_name'],   // string
+                    'project_description' => $_POST['project_descrption']    // integer (number) 
+                ), 
+                array( 'project_prefix' => $_GET['project'] )
+              
+            );
+            echo "<pre>";
+            print_r($_POST);
+            echo "</pre>";
+            //echo "<script type='text/javascript'>reload()</script>";
+            ?><div class='notice notice-success is-dismissible'>Updated</div><?php
+        }    
     ?>
     <div class='container'>
         <div class='row'>
@@ -447,8 +508,9 @@ function project_info(){
     
     <?php
     }//end settings
-    else if($_GET['tab' == 'events']){
-        echo "Events";
+    else if($_GET['tab'] == 'activities'){
+        include_once('activities/activities.php');
+
     }
 }
 ?>

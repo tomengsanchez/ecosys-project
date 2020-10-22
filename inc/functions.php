@@ -61,4 +61,19 @@ function get_project_activity($project){
     $cnt = $wpdb->get_var($sql);
     return $cnt;
 }
+
+function get_total_ses_entries($user_id){
+    global $wpdb;
+    $sqlCountTotalEntries = "
+        select user_id,post_title,ID
+            from 
+            " . $wpdb->prefix . "wpforms_entries as entries,
+            " . $wpdb->prefix . "posts as post 
+            where 
+                user_id='" . $user_id . "' and entries.form_id = post.ID
+        ";
+    $cnt = $wpdb->get_var($sqlCountTotalEntries);
+    return $wpdb->num_rows;
+}
+
 ?>
