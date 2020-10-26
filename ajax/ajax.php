@@ -101,6 +101,7 @@ function get_entries_by_form(){
     $result = $wpdb->get_results($sqlCountTotalEntries);
     $sqlCountTotalEntries;
     if($result){
+      
         ?>
         <table class='table'>
             <tr>
@@ -126,8 +127,12 @@ function get_entries_by_form(){
                 <td><?php echo ucfirst($status)?></td>
                 <td><?php echo $res->date?></td>
                 <td><?php echo $res->date_modified?></td>
-                <td><a href='<?php echo get_admin_url()?>admin.php?page=wpforms-entries&view=details&entry_id=1' target="_new">View</a></td>
-                <td><a href='<?php echo get_admin_url()?>admin.php?page=wpforms-entries&view=edit&entry_id=1' target="_new">Edit</a></td>
+                <td><a href='<?php echo get_admin_url()?>admin.php?page=wpforms-entries&view=details&entry_id=<?php echo $res->entry_id?>' target="_new">View</a></td>
+                <?php if(current_user_can('manage_options'))
+                {?>
+                <td><a href='<?php echo get_admin_url()?>admin.php?page=wpforms-entries&view=edit&entry_id=<?php echo $res->entry_id?>' target="_new">Edit</a></td>
+                <?php }
+                ?>
             </tr>
             <?php
             }//foreach1 
@@ -139,7 +144,7 @@ function get_entries_by_form(){
     ?>
         <div class='alert alert-secondary' role='alert'>
             No Ses Entries For This Paps.<br>
-            Maybe this paps has been interview through Onsite SES
+            Maybe this paps had been interview through Onsite SES
         </div>
     <?php
     }

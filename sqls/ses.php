@@ -24,6 +24,6 @@ select *
     wp_wpforms_entries as entries,
     wp_posts as post 
     where 
-        user_id='" . $_REQUEST['uid'] . "' and entries.form_id = post.ID
+        user_id='" . $_REQUEST['uid'] . "' and entries.form_id = post.ID ORDER BY entries.date ASC
 ";
 ?>

@@ -435,7 +435,7 @@ function project_info(){
                 foreach($result as $res){
                     ?>
                     <tr>
-                        <td><a class='button' style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
+                        <td><a class='link' style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
                         <td><?php echo get_user_meta( $res->ID,'last_name',true)?></td>
                         <td><?php echo $res->first_name?></td>
                         <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
@@ -443,7 +443,7 @@ function project_info(){
                         <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
                         <td>(<?php echo getUserActivity($res->ID);?>)<?php echo get_user_meta( $res->ID,'last-login',true)?></td>
-                        <td><span class='button ses_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->first_name?> <?php echo $res->last_name?>'><?php echo get_total_ses_entries($res->ID); ?></span></td>
+                        <td><span class='button ses_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'><?php echo get_total_ses_entries($res->ID); ?></span></td>
                         <td><?php echo get_user_meta( $res->ID,'default_password',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM1-Q-4',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM2-Q-4',true)?></td>
