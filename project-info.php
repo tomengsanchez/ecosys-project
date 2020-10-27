@@ -344,6 +344,7 @@ function project_info(){
     ?>
     <script type='text/javascript'>
         $(document).ready(function(){
+         
             
             $('.ses_button').click(function(){
                 var title = "SES Entries for "  + $(this).attr('full_name');

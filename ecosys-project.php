@@ -22,6 +22,7 @@ include_once('ajax/ajax.php');
 include_once('sqls/users.php');
 include_once('sqls/ses.php');
 include_once('project-info.php');
+include_once('master/master_search.php');
 include_once('inc/automate.php');
 // Register hook
 register_activation_hook(__FILE__,'db_set');
@@ -53,7 +54,7 @@ function cdns(){
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
     <?php
 }
-if($_GET['page']=='project-info'){
+if($_GET['page']=='project-info' || $_GET['page']=='master-search'){
     add_action('admin_enqueue_scripts', 'my_enqueue');
     add_action('admin_head','cdns');
 }
@@ -70,6 +71,10 @@ function ecosys_project_add_sub_menu(){
 }
 add_action('admin_menu','ecosys_project_add_sub_menu');
 
+function add_master_search(){
+    add_submenu_page( 'ecosys-project-page','Master Search for Paps', 'Master Search', 'manage_ecosys_project', 'master-search','master_search', 1);
+}
+add_action('admin_menu','add_master_search');
 /*
 *Main Function
 */

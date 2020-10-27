@@ -152,3 +152,140 @@ function get_entries_by_form(){
     <?php
     die();
 }
+
+/**
+ * function for Ajax Master Search
+ */
+add_action( 'wp_ajax_master_search', 'master_search_f' );
+function master_search_f(){
+    $searchQ = array( 
+        'orderby'=>array('meta_key'=>'nickname'),
+        'order'=>'ASC',
+        'meta_query' => array(
+                'relation' => 'OR',
+                array(
+                        'key'     => 'first_name',
+                        'value'   => $_REQUEST['searchQ'],
+                        'compare' => 'LIKE'
+                ),
+                array(
+                        'key'     => 'last_name',
+                        'value'   => $_REQUEST['searchQ'],
+                        'compare' => 'LIKE'
+                ),
+                array(
+                        'key'     => 'barangay',
+                        'value'   => $_REQUEST['searchQ'],
+                        'compare' => 'LIKE'
+                ),
+                array(
+                        'key'     => 'nickname',
+                        'value'   => $_REQUEST['searchQ'],
+                        'compare' => 'LIKE'
+                ),
+                array(
+                        'key'     => 'paps_status',
+                        'value'   => $_REQUEST['searchQ'],
+                        'compare' => 'LIKE'
+                )
+
+        )
+    );
+    
+    $userQuery = new WP_User_Query( $searchQ );
+    $result = $userQuery->get_results();
+    //print_r($result);
+    if(!$result){
+        die("<h2 class='alert alert-secondary'>No Search Result For '" . $_REQUEST['searchQ'] . "'</h2>");
+    }
+    $queryNonce = wp_create_nonce(get_current_user_id(  ) . "ajax_query");
+    ?>
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            
+            
+            $('.ses_button').click(function(){
+                var title = "SES Entries for "  + $(this).attr('full_name');
+                $('#ses_modal').modal('toggle');
+                $('.modal-title').html(title);
+                $('#ses_modal .modal-dialog .modal-content .modal-body').html('<div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div>');
+                user_id= $(this).attr('user_id');
+                $.ajax({
+                    type:'POST',
+                    data : {
+                        "_nonce" : "<?php echo $queryNonce;?>",
+                        uid:user_id
+                    },
+                    url : '<?php echo get_admin_url( )?>/admin-ajax.php?action=get_entries_by_form',
+                    success:function(r){
+                        
+                        $('#ses_modal .modal-dialog .modal-content .modal-body').html(r);
+                    }
+                });
+            });
+        });
+    </script>
+    <hr>
+    <div class='modal fade' id='ses_modal' role='dialog'>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-header'>
+                    <h5 class="modal-title" id="exampleModalLongTitle">SES entries</h5>
+                </div>
+                <div class='modal-body'>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <table id='project-table' class='table'>
+        
+        <thead>
+            <tr>
+                <th>Control Number</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Status</th>
+                <th>Mobile Number</th>
+                <th>Barangay</th>
+                <th>City</th>
+                <th>Last Login</th>
+                <th>Ses Entries</th>
+                <th>Default Password</th>
+                <th>SCM1 Question</th>
+                <th>SCM2 Question</th>
+                
+            </tr>
+        </thead>
+        
+            
+        
+        <tbody>
+            <?php
+                foreach($result as $res){
+                    ?>
+                    <tr>
+                        <td><a class='link' style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
+                        <td><?php echo get_user_meta( $res->ID,'last_name',true)?></td>
+                        <td><?php echo $res->first_name?></td>
+                        <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
+                        <td>(<?php echo getUserActivity($res->ID);?>)<?php echo get_user_meta( $res->ID,'last-login',true)?></td>
+                        <td><span class='button ses_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'><?php echo get_total_ses_entries($res->ID); ?></span></td>
+                        <td><?php echo get_user_meta( $res->ID,'default_password',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'SCM1-Q-4',true)?></td>
+                        <td><?php echo get_user_meta( $res->ID,'SCM2-Q-4',true)?></td>
+                    </tr>
+                    <?php        
+                }
+                ?>
+        </tbody>
+    </table>
+    <?php
+    die();
+}
