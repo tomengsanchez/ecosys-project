@@ -208,9 +208,10 @@ function getUserActivity($userId){
 function getUserActivityList($userId){
     global $wpdb;
     $tb = $wpdb->prefix . "ualp_user_activity";
-    $sqlGetUserActivity = "SELECT * as logs FROM " . $tb . " WHERE user_id = '" . $userId . "'";
-    $sqlGetUserActivity= $wpdb->get_row($sqlGetUserActivity,OBJECT);
-    return $sqlGetUserActivity->logs;
+    $sqlGetUserActivity = "SELECT * FROM " . $tb . " WHERE user_id = '" . $userId . "'";
+    $sqlGetUserActivity= $wpdb->get_results($sqlGetUserActivity,OBJECT);
+    
+    return $sqlGetUserActivity;
 }
 
 ?>

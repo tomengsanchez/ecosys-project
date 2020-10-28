@@ -289,3 +289,40 @@ function master_search_f(){
     <?php
     die();
 }
+add_action( 'wp_ajax_get_activity_log', 'get_activity_log' );
+function get_activity_log(){
+    //print_r($_REQUEST);
+    $result = getUserActivityList($_REQUEST['uid']);
+    //print_r($result);
+   if($result){
+    ?>
+    <table class='table'>
+        <tr>
+            <th>Date</th>
+            <th>Action</th>
+            <th>Object</th>
+        </tr>
+        <?php
+            foreach($result as $res){
+                ?>
+                <tr>
+                    <td><?php echo $res->modified_date; ?></td>
+                    <td><?php echo $res->action; ?></td>
+                    <td><?php echo $res->object_type; ?></td>
+                </tr>
+                <?php
+            } 
+        ?>
+    </table>
+    <?php
+   }
+   else{
+    ?>
+    <div class='alert alert-secondary' role='alert'>
+        No Activity For This Paps.<br>
+        
+    </div>
+<?php 
+   }
+    die();
+}

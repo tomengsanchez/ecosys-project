@@ -345,7 +345,25 @@ function project_info(){
     <script type='text/javascript'>
         $(document).ready(function(){
          
-            
+            $('.log_button').click(function(){
+                var title = "Activity Log for for "  + $(this).attr('full_name');
+                $('#log_modal').modal('toggle');
+                $('.modal-title').html(title);
+                $('#log_modal .modal-dialog .modal-content .modal-body').html('<div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div>');
+                user_id= $(this).attr('user_id');
+                $.ajax({
+                    type:'POST',
+                    data : {
+                        "_nonce" : "<?php echo $queryNonce;?>",
+                        uid:user_id
+                    },
+                    url : '<?php echo get_admin_url( )?>/admin-ajax.php?action=get_activity_log',
+                    success:function(r){
+                        
+                        $('#log_modal .modal-dialog .modal-content .modal-body').html(r);
+                    }
+                });
+            });
             $('.ses_button').click(function(){
                 var title = "SES Entries for "  + $(this).attr('full_name');
                 $('#ses_modal').modal('toggle');
@@ -368,6 +386,21 @@ function project_info(){
         });
     </script>
     <hr>
+    <div class='modal fade' id='log_modal' role='dialog'>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class='modal-header'>
+                    <h5 class="modal-title" id="exampleModalLongTitle">SES entries</h5>
+                </div>
+                <div class='modal-body'>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
     <div class='modal fade' id='ses_modal' role='dialog'>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -420,7 +453,7 @@ function project_info(){
                 <th>Mobile Number</th>
                 <th>Barangay</th>
                 <th>City</th>
-                <th>Last Login</th>
+                <th>Login Activities</th>
                 <th>Ses Entries</th>
                 <th>Default Password</th>
                 <th>SCM1 Question</th>
@@ -443,7 +476,7 @@ function project_info(){
                         <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
-                        <td>(<?php echo getUserActivity($res->ID);?>)<?php echo get_user_meta( $res->ID,'last-login',true)?></td>
+                        <td><span class='button log_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'><?php echo getUserActivity($res->ID);?></span></td>
                         <td><span class='button ses_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'><?php echo get_total_ses_entries($res->ID); ?></span></td>
                         <td><?php echo get_user_meta( $res->ID,'default_password',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM1-Q-4',true)?></td>
