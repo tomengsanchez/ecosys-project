@@ -344,7 +344,7 @@ function project_info(){
     ?>
     <script type='text/javascript'>
         $(document).ready(function(){
-         
+            
             $('.log_button').click(function(){
                 var title = "Activity Log for for "  + $(this).attr('full_name');
                 $('#log_modal').modal('toggle');
@@ -476,7 +476,7 @@ function project_info(){
                         <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
-                        <td><span class='button log_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'><?php echo getUserActivity($res->ID);?></span></td>
+                        <td><span class='button log_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'>(<?php echo getUserActivity($res->ID);?>)(<?php echo getUserTaggedActivity($res->ID);?>)</span></td>
                         <td><span class='button ses_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'><?php echo get_total_ses_entries($res->ID); ?></span></td>
                         <td><?php echo get_user_meta( $res->ID,'default_password',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM1-Q-4',true)?></td>

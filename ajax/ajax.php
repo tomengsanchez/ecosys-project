@@ -103,7 +103,13 @@ function get_entries_by_form(){
     if($result){
       
         ?>
-        <table class='table'>
+        <script type='text/javascript'>
+            $(document).ready(function(){
+                $('#s-table').DataTable();
+            });
+        </script>
+        <table class='table' id='s-table'> 
+            <thead>
             <tr>
                 <th>Form Name</th>
                 <th>Status</th>
@@ -112,6 +118,8 @@ function get_entries_by_form(){
                 <th></th>
                 <th></th>
             </tr>
+            </thead>
+            <tbody>
             <?php
             foreach($result as $res){
             ?>
@@ -137,6 +145,7 @@ function get_entries_by_form(){
             <?php
             }//foreach1 
             ?>
+            </tbody>
         </table>
         <?php
     }
@@ -202,7 +211,7 @@ function master_search_f(){
     ?>
     <script type='text/javascript'>
         $(document).ready(function(){
-            
+            $('#s-table').DataTable();
             
             $('.ses_button').click(function(){
                 var title = "SES Entries for "  + $(this).attr('full_name');
@@ -241,7 +250,7 @@ function master_search_f(){
         </div>
         
     </div>
-    <table id='project-table' class='table'>
+    <table id='s-table' class=''>
         
         <thead>
             <tr>
@@ -293,27 +302,88 @@ add_action( 'wp_ajax_get_activity_log', 'get_activity_log' );
 function get_activity_log(){
     //print_r($_REQUEST);
     $result = getUserActivityList($_REQUEST['uid']);
-    //print_r($result);
-   if($result){
+    $resultTagged = getUserTaggedActivityList($_REQUEST['uid']);
+    if(!empty($result) || !empty($resultTagged)){
     ?>
-    <table class='table'>
-        <tr>
-            <th>Date</th>
-            <th>Action</th>
-            <th>Object</th>
-        </tr>
-        <?php
-            foreach($result as $res){
-                ?>
-                <tr>
-                    <td><?php echo $res->modified_date; ?></td>
-                    <td><?php echo $res->action; ?></td>
-                    <td><?php echo $res->object_type; ?></td>
-                </tr>
-                <?php
-            } 
-        ?>
-    </table>
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            $('#log-table').DataTable();
+            $('#tagged-log-table').DataTable();
+        });
+    </script>
+    <div class='accordion' id='logCollapse'>
+        <div class='card'>
+            <div class='card-header' id='myActivityHeader'>
+                <h2 class='mb-0'>
+                    <button class='btn btn-link btn-block text-left'  type='button' data-toggle='collapse' data-target='#collapseMyActivity' aria-controls='collapseMyActivity'>
+                        My Activity
+                    </button>
+                </h2>
+            </div>
+            <div class='collapse show' id='collapseMyActivity' aria-labelledby='myActivityHeader' data-parent='#logCollapse'>
+                <div class='card-body'>
+                    <table id='log-table'>
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Action</th>
+                            <th>Object</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                            foreach($result as $res){
+                                ?>
+                                <tr>
+                                    <td><?php echo $res->modified_date; ?></td>
+                                    <td><?php echo $res->action; ?></td>
+                                    <td><?php echo $res->object_type; ?></td>
+                                </tr>
+                                <?php
+                            } 
+                            
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class='card-header' id='myTaggedActivityHeader'>
+                <h2 class='mb-0'>
+                    <button class='btn btn-link btn-block text-left'  type='button' data-toggle='collapse' data-target='#collapseTaggedMyActivity' aria-controls='collapseTaggedMyActivity'>
+                        My Tagged Activity
+                    </button>
+                </h2>
+            </div>
+            <div class='collapse' id='collapseTaggedMyActivity' aria-labelledby='myTaggedActivityHeader' data-parent='#logCollapse'>
+                <div class='card-body'>
+                <table id='tagged-log-table'>
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>User</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                            foreach($resultTagged as $res){
+                                ?>
+                                <tr>
+                                    <td><?php echo $res->modified_date; ?></td>
+                                    <td><?php echo get_user_meta( $res->user_id, 'nickname',true); ?></td>
+                                    <td><?php echo $res->action; ?></td>
+                                </tr>
+                                <?php
+                            } 
+                            
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <?php
    }
    else{

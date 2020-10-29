@@ -213,5 +213,23 @@ function getUserActivityList($userId){
     
     return $sqlGetUserActivity;
 }
+function getUserTaggedActivityList($userId){
+    global $wpdb;
+    $tb = $wpdb->prefix . "ualp_user_activity";
+    $userId = get_user_meta( $userId, 'nickname',true);
+    $sqlGetUserActivity = "SELECT * FROM " . $tb . " WHERE post_title = '" . $userId . "'";
+    $sqlGetTaggedUserActivity= $wpdb->get_results($sqlGetUserActivity,OBJECT);
+    
+    return $sqlGetTaggedUserActivity;
+}
+function getUserTaggedActivity($userId){
+    global $wpdb;
+    $tb = $wpdb->prefix . "ualp_user_activity";
+    $userId = get_user_meta( $userId, 'nickname',true);
+    $sqlGetUserActivity = "SELECT count(*) as cnt FROM " . $tb . " WHERE post_title = '" . $userId . "'";
+    $sqlGetTaggedUserActivity= $wpdb->get_row($sqlGetUserActivity,OBJECT);
+    
+    return $sqlGetTaggedUserActivity->cnt;
+}
 
 ?>
