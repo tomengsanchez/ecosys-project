@@ -40,6 +40,8 @@ $sqlSCM1Q = array(
         )
         
     ));
+  
+    
 global $sqlSCM1DONEQ; 
 $sqlSCM1DONEQ  = array(
     'meta_query'=>array(

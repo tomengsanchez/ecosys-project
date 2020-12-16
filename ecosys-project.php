@@ -24,6 +24,7 @@ include_once('sqls/ses.php');
 include_once('project-info.php');
 include_once('master/master_search.php');
 include_once('inc/automate.php');
+include_once ('sprout//lib/SproutVideo/Autoloader.php');
 // Register hook
 register_activation_hook(__FILE__,'db_set');
 

@@ -32,14 +32,31 @@ function f_scm1(){
     echo get_paps_count('SCM-1');
     die();
 }
-
+add_action( 'wp_ajax_scm1Survey', 'f_scm1_survey' );
+function f_scm1_survey(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    echo get_paps_count('SCM-1-SURVEY');
+    die();
+}
+add_action( 'wp_ajax_scm1SurveyDone', 'f_scm1_survey_done' );
+function f_scm1_survey_done(){
+    if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
+        exit("SECURITY ERROR");
+        //die();
+    }  
+    echo get_paps_count('SCM-1-SURVEY-DONE');
+    die();
+}
 add_action( 'wp_ajax_scm1DONE', 'f_scm1DONE' );
 function f_scm1DONE(){
     if (!wp_verify_nonce( $_REQUEST['_nonce'],get_current_user_id() . "ajax_query")) {
         exit("SECURITY ERROR");
         //die();
     }  
-    echo get_paps_count('SCM-1-DONE');
+    echo get_paps_count('SCM-1-SURVEY-DONE');
     die();
 }
 

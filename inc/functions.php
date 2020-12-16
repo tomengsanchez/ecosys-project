@@ -75,5 +75,7 @@ function get_total_ses_entries($user_id){
     $cnt = $wpdb->get_var($sqlCountTotalEntries);
     return $wpdb->num_rows;
 }
-
+function hello_suck(){
+    
+}
 ?>

@@ -42,6 +42,9 @@ function project_info(){
                     <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=activities'><span class="dashicons dashicons-list-view" style='padding-top:5px'></span>Activities</a>
                 </li>
                 <li class='nav-item'>
+                    <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=reports'><span class="dashicons dashicons-text-page" style='padding-top:5px'></span>Reports</a>
+                </li>
+                <li class='nav-item'>
                     <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=settings'><span class="dashicons dashicons-admin-generic" style='padding-top:5px'></span>Settings</a>
                 </li>
             </ul>
@@ -90,9 +93,11 @@ function project_info(){
                         <th><h5>Activity</h5></th><th><h5>Current</h5></th><th><h5>Done</h5></th>
                     </tr>
                     <tr>
-                        <th>SCM 1</th><td><span id='scm1'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='scm1DONE' ><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td></td>
+                        <th>SCM 1</th><td><span id='scm1'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='scm1DONE1' >N/A</span></td><td></td>
                     </tr>
-                    
+                    <tr>
+                        <th>SCM 1 SURVEY</th><td><span id='scm1Survey'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='scm1SurveyDONE' ><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td></td>
+                    </tr>
                     <tr>
                         <th>SES</th><td><span id='ses'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='sesDONE'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td></td>
                     </tr>
@@ -103,7 +108,7 @@ function project_info(){
                 </table>
             </div>
             <div class='col'>
-                <canvas id="totalPopulation"  style='margin-left:-150px;width:130px;height:65px'></canvas>
+                <canvas id="totalPopulation"  style=''></canvas>
             </div>
         </div>
     </div>
@@ -128,7 +133,7 @@ function project_info(){
                 var currentChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: ['SCM1', 'SES', 'SCM2'],
+                        labels: ['SCM1', 'SCM-1-SURVEY', 'SES', 'SCM2'],
                         datasets: [{
                             label: '# of Paps Done',
                             //data: [12, 19, 3, 5, 2, 3],
@@ -190,7 +195,7 @@ function project_info(){
                 var myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: ['SCM1 DONE', 'SES DONE', 'SCM2 DONE'],
+                        labels: ['SCM1 SURVEY DONE', 'SES DONE', 'SCM2 DONE'],
                         datasets: [{
                             label: '# of Paps Done',
                             //data: [12, 19, 3, 5, 2, 3],
@@ -260,6 +265,29 @@ function project_info(){
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
                         },
+                        url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1Survey&project=<?php echo $_GET['project']?>',
+                        success:function(r){
+                            $('#scm1Survey').html(r);
+                            currentChart.data.datasets[0].data[1] = r;
+                            currentChart.update();
+                        }
+                    });
+                    $.ajax({
+                        type:'POST',
+                        data:{
+                            "_nonce" : "<?php echo $queryNonce;?>"
+                        },
+                        url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1SurveyDone&project=<?php echo $_GET['project']?>',
+                        success:function(r){
+                            $('#scm1SurveyDONE').html(r);
+                            
+                        }
+                    });
+                    $.ajax({
+                        type:'POST',
+                        data:{
+                            "_nonce" : "<?php echo $queryNonce;?>"
+                        },
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1DONE&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#scm1DONE').html(r);
@@ -276,7 +304,7 @@ function project_info(){
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=ses&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#ses').html(r);
-                            currentChart.data.datasets[0].data[1] = r;
+                            currentChart.data.datasets[0].data[2] = r;
                             currentChart.update();
                         }
                     });
@@ -301,7 +329,7 @@ function project_info(){
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm2&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#scm2').html(r);
-                            currentChart.data.datasets[0].data[2] = r;
+                            currentChart.data.datasets[0].data[3] = r;
                             currentChart.update();
                             
                         }
@@ -336,6 +364,7 @@ function project_info(){
     }
     else if($_GET['tab'] == 'search'){
         global $searchQ;
+      
         $userQuery = new WP_User_Query( $searchQ );
         //echo $userQuery->request;
         $queryNonce = wp_create_nonce(get_current_user_id(  ) . "ajax_query");
@@ -416,6 +445,9 @@ function project_info(){
         </div>
         
     </div>
+    <?php
+
+    ?>
     <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info' method='GET'>
         <table>
             <tr>
@@ -423,7 +455,7 @@ function project_info(){
             </tr>
             <tr>
                 <td>
-                    <h4>Showing 
+                    <b>Showing 
                     <select name='numbers'>
                         <option value='50' <?php if($numbers == 50){ echo "selected";} ?> >50</option>
                         <option value='100' <?php if($numbers == 100) echo "selected" ?> >100</option>
@@ -433,12 +465,14 @@ function project_info(){
                         <option value='2000' <?php if($numbers == 2000) echo "selected" ?> >2000</option>
                         <option value='5000' <?php if($numbers == 5000) echo "selected" ?>>5000</option>
                     </select>
-                     of <?php echo $userQuery->total_users; ?><h4>
+                     of <?php echo $userQuery->total_users; ?><b>&nbsp;&nbsp;
                 </td>
-                <td><input type='hidden' name='page' value='project-info'><input type='hidden' name='tab' value='search'><input type='hidden' name='project' value='<?php echo $_GET['project'] ?>'><h4>Search Keyword</h4>
+                <td><input type='hidden' name='page' value='project-info'><input type='hidden' name='tab' value='search'><input type='hidden' name='project' value='<?php echo $_GET['project'] ?>'><b>Search Keyword</b>
                 </td><td><input type='text' name='s' value='<?php echo $_GET['s'] ?>'></td>
+                
                 <td><input type='submit' name='submit_search' value='Search/Update Table'></td>
-                <td><h4>Search Results <?php if($_GET['s']){echo "for '" . $_GET['s'] . "':" ;}?> <?php echo $userQuery->total_users; ?></h4></td>
+                
+                <td><b>Search Results <?php if($_GET['s']){echo "for '" . $_GET['s'] . "':" ;}?> <?php echo $userQuery->total_users; ?></b></td>
             </tr>
         </table>
     </form>                    
@@ -544,6 +578,11 @@ function project_info(){
     }//end settings
     else if($_GET['tab'] == 'activities'){
         include_once('activities/activities.php');
+
+        
+    }
+    else if($_GET['tab'] == 'reports'){
+        include_once('reports/reports.php');
 
     }
 }
