@@ -7,13 +7,7 @@ function db_set(){
         id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         project_prefix VARCHAR(30) NOT NULL,
         project_name longtext NOT NULL,
-        project_description LONGTEXT NOT NULL,
-        project_scm1-dd longtext NOT NULL,
-        reg_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        project_scm1-fs longtext NOT NULL,
-        project_scm2-dd longtext NOT NULL,
-        project_scm1-fs longtext NOT NULL,
-        project_faq longtext NOT NULL,
+        project_description LONGTEXT NOT NULL
         )';
     
     $tb = $wpdb->prefix . "ec_pm_login_tracker";
