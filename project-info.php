@@ -23,8 +23,9 @@ function project_info(){
 
     $q = 'select * from '. $tb .' WHERE project_prefix = "'. $_GET['project'] .'"';
     $project_info = $wpdb->get_row($q);
-
+    //start
     ?>
+    
     <h4>Project : <?php echo $_GET['project'] ?> </h4>
     <nav class='navbar navbar-expand-lg navbar-light bg-light' style='width:99%'>
         <div class='collapse navbar-collapse'>
