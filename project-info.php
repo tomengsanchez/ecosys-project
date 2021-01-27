@@ -476,7 +476,29 @@ function project_info(){
                 <td><b>Search Results <?php if($_GET['s']){echo "for '" . $_GET['s'] . "':" ;}?> <?php echo $userQuery->total_users; ?></b></td>
             </tr>
         </table>
-    </form>                    
+    </form>       
+    <script>
+        jQuery(document).ready(function(){
+            $("#profileView").click(function(){
+                $('#ses_modal').modal('toggle');
+                $('.modal-title').html('USER PROFILE');
+                $('#ses_modal .modal-dialog .modal-content .modal-body').html('<div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div>');
+                user_id= $(this).attr('user_id');
+                $.ajax({
+                    type:'GET',
+                    data : {
+                        "_nonce" : "<?php echo $queryNonce;?>",
+                        uid:user_id
+                    },
+                    url : '<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>',
+                    success:function(r){
+                        
+                        $('#ses_modal .modal-dialog .modal-content .modal-body').html(r);
+                    }
+                });
+            });
+        });
+    </script>             
     <table id='project-table' class='display'>
        
         <thead>
@@ -504,7 +526,7 @@ function project_info(){
                 foreach($result as $res){
                     ?>
                     <tr>
-                        <td><a class='link' style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
+                        <td><a class='link' style='cursor:pointer'  user_id='<?php echo $res->ID?>' id='profileView1' onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
                         <td><?php echo get_user_meta( $res->ID,'last_name',true)?></td>
                         <td><?php echo $res->first_name?></td>
                         <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
