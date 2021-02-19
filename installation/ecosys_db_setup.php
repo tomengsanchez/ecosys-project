@@ -9,7 +9,7 @@ function db_set(){
         project_name longtext NOT NULL,
         project_description LONGTEXT NOT NULL
         )';
-    
+        
     $tb = $wpdb->prefix . "ec_pm_login_tracker";
 
     $queryTracker = 'CREATE TABLE '. $tb .' (
@@ -19,7 +19,7 @@ function db_set(){
             full_name VARCHAR(50) NOT NULL,
             time varchar(30) NOT NULL,
             date varchar(30) NOT NULL,
-            _read varchar(30) NOT NULL,
+            _read varchar(30) NOT NULL
             )';
     require_once(ABSPATH . "wp-admin/includes/upgrade.php");
     
@@ -36,6 +36,7 @@ function db_set(){
     dbDelta($query);
     dbDelta($queryTracker);
     dbDelta($queryActivity);
+
 
 
 }
