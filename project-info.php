@@ -25,7 +25,7 @@ function project_info(){
     $project_info = $wpdb->get_row($q);
     //start
     ?>
-    
+    <h1>Hi Mike </h1>
     <h4>Project : <?php echo $_GET['project'] ?> </h4>
     <nav class='navbar navbar-expand-lg navbar-light bg-light' style='width:99%'>
         <div class='collapse navbar-collapse'>
