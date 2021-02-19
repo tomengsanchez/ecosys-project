@@ -3,5 +3,5 @@
 
 <?php 
 echo "VIEW HERE";
-echo "Hi Tomeng! Ok na ba ito? Boom!";
+echo "Hi Tomeng! Ok na ba ito? Boom";
 ?>
