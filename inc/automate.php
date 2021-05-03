@@ -12,7 +12,6 @@ $lg =$user->user_login;
  */
 add_action('wp_login', 'project_activity_logger',10,2);
 function project_activity_logger($lg,$user){
-    
     global $wpdb;
     $tb = $wpdb->prefix . "ec_pm_activity_logger";
     $wpdb->insert( 
@@ -25,13 +24,8 @@ function project_activity_logger($lg,$user){
             'project'=>get_user_meta( $user->ID,'project',true)
         ) 
     );
+    echo $wpdb->last_error;
     
-    $project = get_user_meta( get_current_user_id(),'project',true);
-    if($project){
-        wp_redirect(get_home_url() . '/respondent-dashboard');
-    }
-    
-
 }
 
 

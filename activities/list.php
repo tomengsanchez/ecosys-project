@@ -1,12 +1,20 @@
 <?php 
+//define( 'WP_DEBUG', true );
+
 
 ?>
-<h1>Activity List</h1>
+<h5>Activity List</h5>
 <script>
 jQuery(document).ready(function(){
-    $("#list").dataTable();
+    jQuery("#list").dataTable();
+    jQuery('#addNewEvents').click(function(){
+        alert(1);
+    });
+    
 });
 </script>
+<hr>
+<button class='button' id='addNewEvents'>Add New Events</button>
 <hr>
 <table id='list' class='fluid'>
     <thead>
