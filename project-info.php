@@ -218,7 +218,7 @@ function project_info(){
                     }
                 });
                 function papsPopInterval(){
-                    $.ajax({
+                    jQuery.ajax({
                         type:'POST',
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
@@ -230,7 +230,7 @@ function project_info(){
                             totPop.update();
                         }
                     });
-                    $.ajax({
+                    jQuery.ajax({
                         type:'POST',
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
@@ -243,7 +243,7 @@ function project_info(){
                         }
                     });
                     
-                    $.ajax({
+                    jQuery.ajax({
                         type:'POST',
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
@@ -255,7 +255,7 @@ function project_info(){
                             currentChart.update();
                         }
                     });
-                    $.ajax({
+                    jQuery.ajax({
                         type:'POST',
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
@@ -268,7 +268,7 @@ function project_info(){
                             myChart.update();
                         }
                     });
-                    $.ajax({
+                    jQuery.ajax({
                         type:'POST',
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
@@ -280,7 +280,7 @@ function project_info(){
                             currentChart.update();
                         }
                     });
-                    $.ajax({
+                    jQuery.ajax({
                         type:'POST',
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
@@ -293,7 +293,7 @@ function project_info(){
 
                         }
                     });
-                    $.ajax({
+                    jQuery.ajax({
                         type:'POST',
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
@@ -306,7 +306,7 @@ function project_info(){
                             
                         }
                     });
-                    $.ajax({
+                    jQuery.ajax({
                         type:'POST',
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
