@@ -122,7 +122,7 @@ function project_info(){
         </div>
        
         <script>
-            $(document).ready(function(){
+            jQuery(document).ready(function(){
                 //barchart
                 var ctx = document.getElementById('currentChart');
                 var currentChart = new Chart(ctx, {
@@ -343,15 +343,15 @@ function project_info(){
         $result = $userQuery->get_results();
     ?>
     <script type='text/javascript'>
-        $(document).ready(function(){
+        jQuery(document).ready(function(){
             
-            $('.ses_button').click(function(){
+            jQuery('.ses_button').click(function(){
                 var title = "SES Entries for "  + $(this).attr('full_name');
-                $('#ses_modal').modal('toggle');
-                $('.modal-title').html(title);
-                $('#ses_modal .modal-dialog .modal-content .modal-body').html('<div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div>');
+                jQuery('#ses_modal').modal('toggle');
+                jQuery('.modal-title').html(title);
+                jQuery('#ses_modal .modal-dialog .modal-content .modal-body').html('<div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div>');
                 user_id= $(this).attr('user_id');
-                $.ajax({
+                jQuery.ajax({
                     type:'POST',
                     data : {
                         "_nonce" : "<?php echo $queryNonce;?>",
@@ -360,7 +360,7 @@ function project_info(){
                     url : '<?php echo get_admin_url( )?>/admin-ajax.php?action=get_entries_by_form',
                     success:function(r){
                         
-                        $('#ses_modal .modal-dialog .modal-content .modal-body').html(r);
+                        jQuery('#ses_modal .modal-dialog .modal-content .modal-body').html(r);
                     }
                 });
             });
