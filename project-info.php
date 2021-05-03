@@ -23,10 +23,8 @@ function project_info(){
 
     $q = 'select * from '. $tb .' WHERE project_prefix = "'. $_GET['project'] .'"';
     $project_info = $wpdb->get_row($q);
-    //start
+
     ?>
-    <h1>Hi Mike :)</h1>
-    <h4>updated from t430 laptop</h4>
     <h4>Project : <?php echo $_GET['project'] ?> </h4>
     <nav class='navbar navbar-expand-lg navbar-light bg-light' style='width:99%'>
         <div class='collapse navbar-collapse'>
@@ -44,13 +42,7 @@ function project_info(){
                     <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=activities'><span class="dashicons dashicons-list-view" style='padding-top:5px'></span>Activities</a>
                 </li>
                 <li class='nav-item'>
-                    <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=reports'><span class="dashicons dashicons-text-page" style='padding-top:5px'></span>Reports</a>
-                </li>
-                <li class='nav-item'>
                     <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=settings'><span class="dashicons dashicons-admin-generic" style='padding-top:5px'></span>Settings</a>
-                </li>
-                <li class='nav-item'>
-                    <a class='nav-link navbar-brand' href='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info&project=<?php echo $_GET['project'] ?>&tab=sesreports'><span class="dashicons dashicons-admin-generic" style='padding-top:5px'></span>SES Reports</a>
                 </li>
             </ul>
         </div>
@@ -98,11 +90,9 @@ function project_info(){
                         <th><h5>Activity</h5></th><th><h5>Current</h5></th><th><h5>Done</h5></th>
                     </tr>
                     <tr>
-                        <th>SCM 1</th><td><span id='scm1'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='scm1DONE1' >N/A</span></td><td></td>
+                        <th>SCM 1</th><td><span id='scm1'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='scm1DONE' ><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td></td>
                     </tr>
-                    <tr>
-                        <th>SCM 1 SURVEY</th><td><span id='scm1Survey'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='scm1SurveyDONE' ><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td></td>
-                    </tr>
+                    
                     <tr>
                         <th>SES</th><td><span id='ses'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td><span id='sesDONE'><img src="<?php echo get_site_url() . "/wp-content/plugins/ecosys-project/img/ajax-loader-dark.gif"?>" width="20px" height="20px"></span></td><td></td>
                     </tr>
@@ -113,7 +103,7 @@ function project_info(){
                 </table>
             </div>
             <div class='col'>
-                <canvas id="totalPopulation"  style=''></canvas>
+                <canvas id="totalPopulation"  style='margin-left:-150px;width:130px;height:65px'></canvas>
             </div>
         </div>
     </div>
@@ -138,7 +128,7 @@ function project_info(){
                 var currentChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: ['SCM1', 'SCM-1-SURVEY', 'SES', 'SCM2'],
+                        labels: ['SCM1', 'SES', 'SCM2'],
                         datasets: [{
                             label: '# of Paps Done',
                             //data: [12, 19, 3, 5, 2, 3],
@@ -200,7 +190,7 @@ function project_info(){
                 var myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: ['SCM1 SURVEY DONE', 'SES DONE', 'SCM2 DONE'],
+                        labels: ['SCM1 DONE', 'SES DONE', 'SCM2 DONE'],
                         datasets: [{
                             label: '# of Paps Done',
                             //data: [12, 19, 3, 5, 2, 3],
@@ -270,29 +260,6 @@ function project_info(){
                         data:{
                             "_nonce" : "<?php echo $queryNonce;?>"
                         },
-                        url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1Survey&project=<?php echo $_GET['project']?>',
-                        success:function(r){
-                            $('#scm1Survey').html(r);
-                            currentChart.data.datasets[0].data[1] = r;
-                            currentChart.update();
-                        }
-                    });
-                    $.ajax({
-                        type:'POST',
-                        data:{
-                            "_nonce" : "<?php echo $queryNonce;?>"
-                        },
-                        url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1SurveyDone&project=<?php echo $_GET['project']?>',
-                        success:function(r){
-                            $('#scm1SurveyDONE').html(r);
-                            
-                        }
-                    });
-                    $.ajax({
-                        type:'POST',
-                        data:{
-                            "_nonce" : "<?php echo $queryNonce;?>"
-                        },
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm1DONE&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#scm1DONE').html(r);
@@ -309,7 +276,7 @@ function project_info(){
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=ses&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#ses').html(r);
-                            currentChart.data.datasets[0].data[2] = r;
+                            currentChart.data.datasets[0].data[1] = r;
                             currentChart.update();
                         }
                     });
@@ -334,7 +301,7 @@ function project_info(){
                         url:'<?php echo get_admin_url( )?>/admin-ajax.php?action=scm2&project=<?php echo $_GET['project']?>',
                         success:function(r){
                             $('#scm2').html(r);
-                            currentChart.data.datasets[0].data[3] = r;
+                            currentChart.data.datasets[0].data[2] = r;
                             currentChart.update();
                             
                         }
@@ -369,7 +336,6 @@ function project_info(){
     }
     else if($_GET['tab'] == 'search'){
         global $searchQ;
-      
         $userQuery = new WP_User_Query( $searchQ );
         //echo $userQuery->request;
         $queryNonce = wp_create_nonce(get_current_user_id(  ) . "ajax_query");
@@ -379,25 +345,6 @@ function project_info(){
     <script type='text/javascript'>
         $(document).ready(function(){
             
-            $('.log_button').click(function(){
-                var title = "Activity Log for for "  + $(this).attr('full_name');
-                $('#log_modal').modal('toggle');
-                $('.modal-title').html(title);
-                $('#log_modal .modal-dialog .modal-content .modal-body').html('<div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div>');
-                user_id= $(this).attr('user_id');
-                $.ajax({
-                    type:'POST',
-                    data : {
-                        "_nonce" : "<?php echo $queryNonce;?>",
-                        uid:user_id
-                    },
-                    url : '<?php echo get_admin_url( )?>/admin-ajax.php?action=get_activity_log',
-                    success:function(r){
-                        
-                        $('#log_modal .modal-dialog .modal-content .modal-body').html(r);
-                    }
-                });
-            });
             $('.ses_button').click(function(){
                 var title = "SES Entries for "  + $(this).attr('full_name');
                 $('#ses_modal').modal('toggle');
@@ -420,21 +367,6 @@ function project_info(){
         });
     </script>
     <hr>
-    <div class='modal fade' id='log_modal' role='dialog'>
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class='modal-header'>
-                    <h5 class="modal-title" id="exampleModalLongTitle">SES entries</h5>
-                </div>
-                <div class='modal-body'>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-        
-    </div>
     <div class='modal fade' id='ses_modal' role='dialog'>
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -450,9 +382,6 @@ function project_info(){
         </div>
         
     </div>
-    <?php
-
-    ?>
     <form  action='<?php echo get_site_url()?>/wp-admin/admin.php?page=project-info' method='GET'>
         <table>
             <tr>
@@ -460,7 +389,7 @@ function project_info(){
             </tr>
             <tr>
                 <td>
-                    <b>Showing 
+                    <h4>Showing 
                     <select name='numbers'>
                         <option value='50' <?php if($numbers == 50){ echo "selected";} ?> >50</option>
                         <option value='100' <?php if($numbers == 100) echo "selected" ?> >100</option>
@@ -470,39 +399,15 @@ function project_info(){
                         <option value='2000' <?php if($numbers == 2000) echo "selected" ?> >2000</option>
                         <option value='5000' <?php if($numbers == 5000) echo "selected" ?>>5000</option>
                     </select>
-                     of <?php echo $userQuery->total_users; ?><b>&nbsp;&nbsp;
+                     of <?php echo $userQuery->total_users; ?><h4>
                 </td>
-                <td><input type='hidden' name='page' value='project-info'><input type='hidden' name='tab' value='search'><input type='hidden' name='project' value='<?php echo $_GET['project'] ?>'><b>Search Keyword</b>
+                <td><input type='hidden' name='page' value='project-info'><input type='hidden' name='tab' value='search'><input type='hidden' name='project' value='<?php echo $_GET['project'] ?>'><h4>Search Keyword</h4>
                 </td><td><input type='text' name='s' value='<?php echo $_GET['s'] ?>'></td>
-                
                 <td><input type='submit' name='submit_search' value='Search/Update Table'></td>
-                
-                <td><b>Search Results <?php if($_GET['s']){echo "for '" . $_GET['s'] . "':" ;}?> <?php echo $userQuery->total_users; ?></b></td>
+                <td><h4>Search Results <?php if($_GET['s']){echo "for '" . $_GET['s'] . "':" ;}?> <?php echo $userQuery->total_users; ?></h4></td>
             </tr>
         </table>
-    </form>       
-    <script>
-        jQuery(document).ready(function(){
-            $("#profileView").click(function(){
-                $('#ses_modal').modal('toggle');
-                $('.modal-title').html('USER PROFILE');
-                $('#ses_modal .modal-dialog .modal-content .modal-body').html('<div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div><div class="spinner-grow" role="status"></div>');
-                user_id= $(this).attr('user_id');
-                $.ajax({
-                    type:'GET',
-                    data : {
-                        "_nonce" : "<?php echo $queryNonce;?>",
-                        uid:user_id
-                    },
-                    url : '<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>',
-                    success:function(r){
-                        
-                        $('#ses_modal .modal-dialog .modal-content .modal-body').html(r);
-                    }
-                });
-            });
-        });
-    </script>             
+    </form>                    
     <table id='project-table' class='display'>
        
         <thead>
@@ -514,7 +419,7 @@ function project_info(){
                 <th>Mobile Number</th>
                 <th>Barangay</th>
                 <th>City</th>
-                <th>Login Activities</th>
+                <th>Last Login</th>
                 <th>Ses Entries</th>
                 <th>Default Password</th>
                 <th>SCM1 Question</th>
@@ -530,15 +435,15 @@ function project_info(){
                 foreach($result as $res){
                     ?>
                     <tr>
-                        <td><a class='link' style='cursor:pointer'  user_id='<?php echo $res->ID?>' id='profileView1' onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
+                        <td><a class='link' style='cursor:pointer'  onclick='window.open("<?php echo get_site_url() . "/user-profile/?user_id=" . $res->ID?>","_blank","toolbar=yes,scrollbars=yes,resizable=yes")'><?php echo $res->user_login?></a></td>
                         <td><?php echo get_user_meta( $res->ID,'last_name',true)?></td>
                         <td><?php echo $res->first_name?></td>
                         <td><?php echo get_user_meta( $res->ID,'paps_status',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'mobile_number',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'barangay',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'city',true)?></td>
-                        <td><span class='button log_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'>(<?php echo getUserActivity($res->ID);?>)(<?php echo getUserTaggedActivity($res->ID);?>)</span></td>
-                        <td><span class='button ses_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->user_login?>-<?php echo $res->first_name?><?php echo $res->last_name?>'><?php echo get_total_ses_entries($res->ID); ?></span></td>
+                        <td>(<?php echo getUserActivity($res->ID);?>)<?php echo get_user_meta( $res->ID,'last-login',true)?></td>
+                        <td><span class='button ses_button' user_id='<?php echo $res->ID; ?>' full_name='<?php echo $res->first_name?> <?php echo $res->last_name?>'><?php echo get_total_ses_entries($res->ID); ?></span></td>
                         <td><?php echo get_user_meta( $res->ID,'default_password',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM1-Q-4',true)?></td>
                         <td><?php echo get_user_meta( $res->ID,'SCM2-Q-4',true)?></td>
@@ -605,17 +510,6 @@ function project_info(){
     }//end settings
     else if($_GET['tab'] == 'activities'){
         include_once('activities/activities.php');
-
-        
-    }
-    else if($_GET['tab'] == 'reports'){
-        include_once('reports/reports.php');
-
-    }
-    else if($_GET['tab'] == 'sesreports'){
-        include_once('sqls/sesreports.php');
-        include_once('sesreports/sesreports.php');
-        
 
     }
 }
