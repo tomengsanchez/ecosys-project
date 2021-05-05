@@ -76,4 +76,7 @@ function get_total_ses_entries($user_id){
     return $wpdb->num_rows;
 }
 
+function get_paps_list(){
+    
+}
 ?>
