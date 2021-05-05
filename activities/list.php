@@ -18,13 +18,64 @@ jQuery(document).ready(function(){
     jQuery('#addNewEvents').click(function(){
         jQuery('#addNewEventsModal').modal('toggle');
     });
-    
+    function checkIfAdded(selectedId){
+        send = false;
+        $("#attendeesTable tr td.id").each(function(){
+            if(selectedId == $(this).html()){
+                
+                send = false;
+            }
+            else{
+                send = true;
+            }
+            return send;
+        });
+    }
 
+    $("#checkIf").click(function(){
+        checkIfAdded();
+    });
     jQuery("#addToTable").click(function(){
-        ctrl = jQuery("#controlNumbersInput").val();
-        var ctrl = ctrl.split('/');
-        jQuery("#attendeesTable tbody").append("<tr><td>" + ctrl[0] + "</td><td>" + ctrl[1] + "</td><td><input type='checkbox' id='check-" + ctrl[0]+ "' class='selectedAttendees'></td></tr>");
-
+        ctrlAr = jQuery("#controlNumbersInput").val();
+        var ctrl = ctrlAr.split('/');
+        if(ctrl[0]){
+            function sendToTable(){
+                jQuery("#attendeesTable tbody").append("<tr><td class='id'>" + ctrl[0] + "</td><td>" + ctrl[1] + "</td><td><input type='checkbox' id='check-" + ctrl[0]+ "' class='selectedAttendees'></td></tr>");
+            }
+            row = 0;
+            $("#attendeesTable tr td.id").each(function(){
+                row++;
+            });
+            
+            if(row == 0){
+                sendToTable();
+            }
+            else{
+                isSend = false;
+                var  added = [];
+                
+                $("#attendeesTable tr td.id").each(function(){
+                    added.push($(this).html());
+                });
+                if(added.includes(ctrl[0])){
+                    alert("Please Select Another");
+                }
+                else{
+                    sendToTable();
+                }
+            }
+            
+                
+            //controlNumbersAuto[controlNumbersAuto.indexOf(ctrlAr)];
+            //alert(controlNumbersAuto.indexOf(ctrlAr));
+            //jQuery("#controlNumbersInput").val('');
+        }
+        else{
+            alert("Please Select Control IDS");
+        }
+        
+        
+        
     });
 
     jQuery("#close").click(function(){
@@ -32,9 +83,9 @@ jQuery(document).ready(function(){
         
     });
 });
-
+var controlNumbersAuto = <?php echo json_encode($controlNumbers);?>;
 jQuery( function() {
-    var controlNumbersAuto = <?php echo json_encode($controlNumbers);?>;
+    
     jQuery( "#controlNumbersInput" ).autocomplete({
     source: controlNumbersAuto,
     appendTo : $('#controlNumbersDiv')
@@ -104,6 +155,7 @@ jQuery( function() {
                             <label for="controlNumbersInput" class='col-sm-2'>Tags: </label>
                             <input id="controlNumbersInput" class='col-sm-8' class='form-control' size='20'>
                             <button class='button' id='addToTable' class='form-control col-sm-2'>Add</button>
+                            <button class='button' id='checkIf'>Check</button>
                             <div id='controlNumbersDiv'></div>
                         </div>
                     <div class='div'>
