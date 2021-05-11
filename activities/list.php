@@ -35,7 +35,8 @@ jQuery(document).ready(function(){
     $("#checkIf").click(function(){
         checkIfAdded();
     });
-    jQuery("#addToTable").click(function(){
+    jQuery("#addToTable").click(function(e){
+        e.preventDefault();
         ctrlAr = jQuery("#controlNumbersInput").val();
         var ctrl = ctrlAr.split('/');
         if(ctrl[0]){
@@ -65,10 +66,6 @@ jQuery(document).ready(function(){
                 }
             }
             
-                
-            //controlNumbersAuto[controlNumbersAuto.indexOf(ctrlAr)];
-            //alert(controlNumbersAuto.indexOf(ctrlAr));
-            //jQuery("#controlNumbersInput").val('');
         }
         else{
             alert("Please Select Control IDS");
@@ -79,7 +76,10 @@ jQuery(document).ready(function(){
     });
 
     jQuery("#close").click(function(){
-        
+        //alert('art');
+    });
+    jQuery("#save").click(function(e){
+        e.preventDefault();
         
     });
 });
@@ -118,8 +118,8 @@ jQuery( function() {
             <div class='modal-header'>
                 <h5 class="modal-title" id="exampleModalLongTitle">Add New Events</h5>
             </div>
-            <div class='modal-body'>
-                
+            <div class='modal-body needs-validation' >
+                <form class='needs-validation'>
                     <div class="form-group row">
                         <label for='eventsDate' class='col-sm-2 col-form-label'>Date</label>
                         <div class="col-sm-10">
@@ -172,12 +172,13 @@ jQuery( function() {
                         </table>
                         
                     </div>
-                
+                        
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id='save'>Save</button>
+                <button type="submit" class="btn btn-primary" id='save'>Save</button>
                 <button type="button" class="btn btn-secondary" id='close' data-dismiss="modal" dispose='modal'>Close</button>
             </div>
+            </form>  
         </div>
     </div>
 </div>
