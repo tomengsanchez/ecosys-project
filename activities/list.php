@@ -32,7 +32,8 @@ jQuery(document).ready(function(){
         });
     }
 
-    $("#checkIf").click(function(){
+    $("#checkIf").click(function(e){
+        e.preventDefault();
         checkIfAdded();
     });
     jQuery("#addToTable").click(function(e){
@@ -75,12 +76,13 @@ jQuery(document).ready(function(){
         
     });
 
-    jQuery("#close").click(function(){
+    jQuery("#close").click(function(e){
         //alert('art');
+        e.preventDefault();
     });
     jQuery("#save").click(function(e){
+        alert(1);
         e.preventDefault();
-        
     });
 });
 var controlNumbersAuto = <?php echo json_encode($controlNumbers);?>;
